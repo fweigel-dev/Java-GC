@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weitere Garbage Collectors</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+        }
+
+        .content {
+            display: flex;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            max-width: 1200px;
+            width: 95%;
+        }
+
+        .gc-main {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .gc-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .gc-box {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gc-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #3498db;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        li {
+            position: relative;
+            padding-left: 1.5em;
+            margin-bottom: 0.5em;
+            line-height: 1.4;
+            font-size: 0.9em;
+        }
+
+        li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .info-panel {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s ease;
+        }
+
+        .info-content {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            width: 300px;
+        }
+
+        .show-info {
+            width: 300px;
+        }
+
+        .active {
+            background-color: #e8f4fd;
+            border: 2px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <div class="gc-main">
+        <h1>Weitere Garbage Collectors</h1>
+        <div class="gc-container">
+            <div class="gc-box" onclick="toggleInfo('cms')">
+                <h2>Concurrent Mark Sweep (CMS)</h2>
+                <ul>
+                    <li>Deprecated seit Java 9</li>
+                    <li>Entfernt in Java 14</li>
+                    <li>G1 als Ersatz</li>
+                </ul>
+            </div>
+            <div class="gc-box" onclick="toggleInfo('epsilon')">
+                <h2>Epsilon Garbage Collector</h2>
+                <ul>
+                    <li>Do nothing GC</li>
+                    <li>Keine Garbage Collection</li>
+                    <li>Fährt runter, wenn kein Speicher mehr frei</li>
+                    <li>Super geringe Latenz</li>
+                </ul>
+            </div>
+            <div class="gc-box" onclick="toggleInfo('shenandoah')">
+                <h2>Shenandoah</h2>
+                <ul>
+                    <li>Ähnlich zu G1</li>
+                    <li>Kann Objekte während Applikation läuft verschieben</li>
+                    <li>Deutlich schnellere GC</li>
+                    <li>Deutlich intensiver für CPU</li>
+                </ul>
+            </div>
+            <div class="gc-box" onclick="toggleInfo('zgc')">
+                <h2>ZGC</h2>
+                <ul>
+                    <li>Geringe Latenzzeit und Wartezeiten</li>
+                    <li>Applikation läuft während GC weiter</li>
+                    <li>Leichte Benutzbarkeit</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="infoPanel" class="info-panel">
+        <div id="infoContent" class="info-content"></div>
+    </div>
+</div>
+
+<script>
+    const gcInfo = {
+        cms: {
+            title: "Concurrent Mark Sweep (CMS)",
+            content: `
+                <p>Der Concurrent Mark Sweep (CMS) Collector war ein Meilenstein in der Entwicklung von Garbage Collectors für Java. Er wurde entwickelt, um die Pausenzeiten der Anwendung zu reduzieren, indem er einen Großteil seiner Arbeit nebenläufig zur Anwendung ausführt.</p>
+                <h3>Hauptmerkmale:</h3>
+                <ul>
+                    <li>Fokus auf niedrige Pausenzeiten</li>
+                    <li>Arbeitet größtenteils parallel zur Anwendung</li>
+                    <li>Gut geeignet für Anwendungen mit großem Heap und Echtzeitanforderungen</li>
+                </ul>
+                <h3>Nachteile:</h3>
+                <ul>
+                    <li>Komplexer Algorithmus, der schwer zu optimieren ist</li>
+                    <li>Kann zu Heap-Fragmentierung führen</li>
+                    <li>Höherer CPU-Verbrauch im Vergleich zu anderen Collectoren</li>
+                </ul>
+                <p>Aufgrund dieser Nachteile und der Entwicklung neuerer, effizienterer Garbage Collectors wie G1 wurde CMS schließlich deprecated und aus Java entfernt.</p>
+            `
+        },
+        epsilon: {
+            title: "Epsilon Garbage Collector",
+            content: `
+                <p>Der Epsilon Garbage Collector ist ein einzigartiger Ansatz in der Welt der Garbage Collection. Er ist im Wesentlichen ein "No-Op" (No Operation) Collector, der keine Garbage Collection durchführt.</p>
+                <h3>Hauptmerkmale:</h3>
+                <ul>
+                    <li>Allokiert Speicher, führt aber keine Garbage Collection durch</li>
+                    <li>Beendet das Programm, wenn der Heap-Speicher erschöpft ist</li>
+                    <li>Extrem niedrige Latenz und Overhead</li>
+                </ul>
+                <h3>Anwendungsfälle:</h3>
+                <ul>
+                    <li>Leistungstests und Benchmarking</li>
+                    <li>Kurzlebige Jobs, die wenig Speicher benötigen</li>
+                    <li>Lastprüfungen für Speicherverwaltungssysteme</li>
+                </ul>
+                <p>Epsilon ist nicht für typische Produktionsumgebungen gedacht, sondern eher für spezielle Anwendungsfälle, wo maximale Leistung wichtiger ist als Langzeitstabilität.</p>
+            `
+        },
+        shenandoah: {
+            title: "Shenandoah Garbage Collector",
+            content: `
+                <p>Shenandoah ist ein Low-Pause-Time Garbage Collector, der darauf abzielt, die Pausenzeiten unabhängig von der Heap-Größe konstant niedrig zu halten.</p>
+                <h3>Hauptmerkmale:</h3>
+                <ul>
+                    <li>Concurrent Compaction: Kann Objekte verschieben, während die Anwendung läuft</li>
+                    <li>Zielt auf sehr niedrige Pausenzeiten ab, unabhängig von der Heap-Größe</li>
+                    <li>Verwendet einen Brooks-Pointer, um auf verschobene Objekte zu verweisen</li>
+                </ul>
+                <h3>Vorteile:</h3>
+                <ul>
+                    <li>Sehr niedrige und konsistente Pausenzeiten</li>
+                    <li>Gut geeignet für Anwendungen mit großen Heaps und Echtzeitanforderungen</li>
+                </ul>
+                <h3>Nachteile:</h3>
+                <ul>
+                    <li>Höherer CPU-Verbrauch im Vergleich zu anderen Collectoren</li>
+                    <li>Leichter Overhead durch den Brooks-Pointer</li>
+                </ul>
+                <p>Shenandoah ist besonders nützlich für Anwendungen, die sehr große Heaps haben und gleichzeitig niedrige Pausenzeiten benötigen.</p>
+            `
+        },
+        zgc: {
+            title: "ZGC (Z Garbage Collector)",
+            content: `
+                <p>ZGC ist ein skalierbarer Low-Latency Garbage Collector, der darauf abzielt, Pausenzeiten unter 10ms zu halten, unabhängig von der Heap-Größe.</p>
+                <h3>Hauptmerkmale:</h3>
+                <ul>
+                    <li>Concurrent Processing: Führt den Großteil der Arbeit parallel zur Anwendung aus</li>
+                    <li>Skaliert gut von sehr kleinen (Megabytes) bis zu sehr großen (Terabytes) Heap-Größen</li>
+                    <li>Verwendet farbierte Zeiger für effiziente Markierung und Relokation</li>
+                </ul>
+                <h3>Vorteile:</h3>
+                <ul>
+                    <li>Extrem niedrige Pausenzeiten (&lt;10ms)</li>
+                    <li>Gute Durchsatzleistung</li>
+                    <li>Einfach zu konfigurieren und zu benutzen</li>
+                </ul>
+                <h3>Nachteile:</h3>
+                <ul>
+                    <li>Leicht erhöhter Speicherverbrauch durch Metadaten</li>
+                    <li>Nicht so weit verbreitet und erprobt wie ältere Collectoren</li>
+                </ul>
+                <p>ZGC ist eine ausgezeichnete Wahl für Anwendungen, die konsistente Leistung und sehr niedrige Pausenzeiten benötigen, insbesondere bei großen Heaps.</p>
+            `
+        }
+    };
+
+    let activeBox = null;
+
+    function toggleInfo(gcType) {
+        const infoPanel = document.getElementById('infoPanel');
+        const infoContent = document.getElementById('infoContent');
+        const clickedBox = event.currentTarget;
+
+        if (activeBox) {
+            activeBox.classList.remove('active');
+        }
+
+        if (activeBox === clickedBox) {
+            infoPanel.classList.remove('show-info');
+            infoContent.style.opacity = '0';
+            activeBox = null;
+        } else {
+            clickedBox.classList.add('active');
+            infoPanel.classList.add('show-info');
+            infoContent.innerHTML = `<h2>${gcInfo[gcType].title}</h2>${gcInfo[gcType].content}`;
+            setTimeout(() => {
+                infoContent.style.opacity = '1';
+            }, 300);
+            activeBox = clickedBox;
+        }
+    }
+</script>
+</body>
+</html>

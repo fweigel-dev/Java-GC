@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Was ist eine VM?</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+        }
+
+        .content {
+            display: flex;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            max-width: 1200px;
+            width: 95%;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            text-align: left;
+        }
+
+        li {
+            position: relative;
+            padding-left: 1.5em;
+            margin-bottom: 0.8em;
+            line-height: 1.4;
+        }
+
+        li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .diagram-container {
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .diagram {
+            width: 100%;
+            max-width: 600px;
+            border: 2px solid #333;
+            margin: 20px auto;
+        }
+
+        .row {
+            display: flex;
+        }
+
+        .cell {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .application {
+            background-color: #AED6F1;
+        }
+
+        .os {
+            background-color: #5DADE2;
+        }
+
+        .vm {
+            background-color: #A9DFBF;
+        }
+
+        .hypervisor {
+            background-color: #82E0AA;
+        }
+
+        .hardware {
+            background-color: #58D68D;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 0 10px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .info-panel {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s ease;
+        }
+
+        .info-content {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <div class="main-content">
+        <h1>Was ist eine VM?</h1>
+
+        <ul id="description">
+            <li>Eine virtuelle Darstellung eines physischen Computers</li>
+            <li>Mehrere VMs können auf einem einzigen physischen Computer laufen</li>
+            <li>Jede VM hat ihr eigenes Betriebssystem und eigene Anwendungen</li>
+            <li>VMs sind voneinander isoliert für verbesserte Sicherheit</li>
+            <li>Ermöglicht effiziente Nutzung von Hardware-Ressourcen</li>
+            <li>Erleichtert Tests, Entwicklung und Unterstützung von Legacy-Software</li>
+            <li>Verwaltet durch einen Hypervisor, der Ressourcen zuweist</li>
+        </ul>
+
+        <div class="diagram-container">
+            <div class="diagram">
+                <div id="applicationRow" class="row"></div>
+                <div id="osRow" class="row"></div>
+                <div id="vmRow" class="row"></div>
+                <div class="row">
+                    <div class="cell hypervisor">Hypervisor</div>
+                </div>
+                <div class="row">
+                    <div class="cell hardware">Physische Hardware</div>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <button onclick="addVM()">VM hinzufügen</button>
+            <button onclick="removeVM()">VM entfernen</button>
+        </div>
+    </div>
+    <div id="infoPanel" class="info-panel">
+        <div id="infoContent" class="info-content"></div>
+    </div>
+</div>
+
+<script>
+
+    function addVM() {
+        const applicationRow = document.getElementById('applicationRow');
+        const osRow = document.getElementById('osRow');
+        const vmRow = document.getElementById('vmRow');
+
+        if (vmRow.children.length < 3) {
+            applicationRow.innerHTML += `<div class="cell application">Anwendung</div>`;
+            osRow.innerHTML += `<div class="cell os">OS</div>`;
+            vmRow.innerHTML += `<div class="cell vm">VM</div>`;
+        }
+    }
+
+    function removeVM() {
+        const applicationRow = document.getElementById('applicationRow');
+        const osRow = document.getElementById('osRow');
+        const vmRow = document.getElementById('vmRow');
+
+        if (vmRow.children.length > 0) {
+            applicationRow.removeChild(applicationRow.lastChild);
+            osRow.removeChild(osRow.lastChild);
+            vmRow.removeChild(vmRow.lastChild);
+        }
+    }
+
+
+    addVM();
+</script>
+</body>
+</html>

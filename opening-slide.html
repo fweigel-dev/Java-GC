@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Garbage Collectors</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .content {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            width: 40vw;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .gc-bin {
+            width: 100px;
+            margin: 0 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bin {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bin img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .bin-label {
+            margin-top: 5px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .mascot {
+            width: 300px;
+            height: 300px;
+            background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fscoop-cms.s3-eu-west-1.amazonaws.com%2F55e853c7ca2f3a596c8b4568%2Fjava-mascot-min.png&f=1&nofb=1&ipt=e908032b39ec7900501b7cad701247e6c8585ccf5bc30b3c98c0e48c464d86d5&ipo=images');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: 20px;
+        }
+
+        .curved-layout {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            height: 150px;
+            position: relative;
+        }
+
+        .curved-layout .gc-bin {
+            position: absolute;
+            transform-origin: top center;
+        }
+
+        .curved-layout .gc-bin:nth-child(1) {
+            transform: translateX(-300px) translateY(-100px);
+        }
+
+        .curved-layout .gc-bin:nth-child(2) {
+            transform: translateX(-200px) translateY(-80px);
+        }
+
+        .curved-layout .gc-bin:nth-child(3) {
+            transform: translateX(-100px) translateY(-60px);
+        }
+
+        .curved-layout .gc-bin:nth-child(4) {
+            transform: translateX(0) translateY(-40px);
+        }
+
+        .curved-layout .gc-bin:nth-child(5) {
+            transform: translateX(100px) translateY(-60px);
+        }
+
+        .curved-layout .gc-bin:nth-child(6) {
+            transform: translateX(200px) translateY(-80px);
+        }
+
+        .curved-layout .gc-bin:nth-child(7) {
+            transform: translateX(300px) translateY(-100px);
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+<div class="container">
+    <h1>Java Memory Management</h1>
+    <h2>Garbage Collection</h2>
+    <div class="mascot"></div>
+    <div class="curved-layout">
+        <div class="gc-bin">
+            <div class="bin">
+                <img src="assets/recycle.svg" alt="Serial GC"
+                     style="filter: invert(13%) sepia(94%) saturate(7466%) hue-rotate(0deg) brightness(94%) contrast(117%);">
+            </div>
+            <span class="bin-label">Serial GC</span>
+        </div>
+        <div class="gc-bin">
+            <div class="bin">
+                <img src="assets/recycle.svg" alt="Parallel GC"
+                     style="filter: invert(55%) sepia(96%) saturate(1739%) hue-rotate(86deg) brightness(128%) contrast(119%);">
+            </div>
+            <span class="bin-label">Parallel GC</span>
+        </div>
+        <div class="gc-bin">
+            <div class="bin">
+                <img src="assets/recycle.svg" alt="G1 GC"
+                     style="filter: invert(55%) sepia(95%) saturate(1731%) hue-rotate(360deg) brightness(101%) contrast(105%);">
+            </div>
+            <span class="bin-label">G1 GC</span>
+        </div>
+        <div class="gc-bin">
+            <div class="bin">
+                <img src="assets/recycle.svg" alt="CMS GC"
+                     style="filter: invert(8%) sepia(98%) saturate(7493%) hue-rotate(248deg) brightness(89%) contrast(143%);">
+            </div>
+            <span class="bin-label">CMS GC</span>
+        </div>
+        <div class="gc-bin">
+            <div class="bin">
+                <img src="assets/recycle.svg" alt="ZGC"
+                     style="filter: invert(14%) sepia(92%) saturate(7085%) hue-rotate(300deg) brightness(91%) contrast(117%);">
+            </div>
+            <span class="bin-label">ZGC GC</span>
+        </div>
+        <div class="gc-bin">
+            <div class="bin">
+                <img src="assets/recycle.svg" alt="Epsilon GC"
+                     style="filter: invert(93%) sepia(18%) saturate(7154%) hue-rotate(359deg) brightness(103%) contrast(94%);">
+            </div>
+            <span class="bin-label">Epsilon GC</span>
+        </div>
+        <div class="gc-bin">
+            <div class="bin">
+                <img src="assets/recycle.svg" alt="Shenandoah GC"
+                     style="filter: invert(17%) sepia(91%) saturate(5371%) hue-rotate(276deg) brightness(89%) contrast(118%);">
+            </div>
+            <span class="bin-label">Shenandoah GC</span>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

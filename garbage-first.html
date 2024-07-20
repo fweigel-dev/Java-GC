@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G1 Garbage Collector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 95%;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .gc-visualization {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .region {
+            border: 2px solid #3498db;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .region:hover {
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+        }
+
+        .cells {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+            margin-bottom: 10px;
+        }
+
+        .cell {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transition: background-color 0.5s ease;
+        }
+
+        .young {
+            background-color: #2ecc71;
+        }
+
+        .old {
+            background-color: #3498db;
+        }
+
+        .garbage {
+            background-color: #e74c3c;
+        }
+
+        .empty {
+            background-color: #ecf0f1;
+        }
+
+        .selected {
+            border: 3px solid #f39c12;
+        }
+
+        .label {
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .legend-label {
+            font-size: 14px;
+        }
+
+        .settings {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .settings label {
+            font-size: 14px;
+        }
+
+        .settings input {
+            width: 70px;
+            padding: 8px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #explanation {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>G1 Garbage Collector</h1>
+    <div class="gc-visualization" id="heap">
+    </div>
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color young"></div>
+            <span class="legend-label">Young Objects</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color old"></div>
+            <span class="legend-label">Old Objects</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color garbage"></div>
+            <span class="legend-label">Garbage</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color empty"></div>
+            <span class="legend-label">Freier Speicher</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="border: 3px solid #f39c12; background-color: transparent;"></div>
+            <span class="legend-label">Marked for Collection</span>
+        </div>
+    </div>
+    <div class="settings">
+        <label for="regionCount">Anzahl der zu markierenden Regionen:</label>
+        <input type="number" id="regionCount" min="1" max="9" value="3">
+    </div>
+    <div class="controls">
+        <button id="removeAll">Remove All Objects</button>
+        <button id="generateObjects">Generate More Objects</button>
+        <button id="mark">Mark Garbage</button>
+        <button id="select">Select Regions</button>
+        <button id="evacuate">Evacuate & Compact</button>
+    </div>
+    <h2 id="status">Initial Heap State</h2>
+</div>
+<script>
+    const REGIONS = 9;
+    const CELLS_PER_REGION = 25;
+    let heapRegions = [];
+    let markedRegions = [];
+    let selectedRegions = [];
+    let hasEvacuated = false;
+
+    function initializeHeap() {
+        heapRegions = [];
+        for (let i = 0; i < REGIONS; i++) {
+            const isYoung = Math.random() < 0.3;
+            const filledCells = Math.floor(Math.random() * (CELLS_PER_REGION / 2));
+            heapRegions.push({
+                isYoung,
+                filledCells,
+                youngObjects: isYoung ? filledCells : 0,
+                oldObjects: isYoung ? 0 : filledCells,
+                garbageCells: 0,
+                marked: false,
+                selected: false
+            });
+        }
+        updateButtons();
+        renderHeap();
+    }
+
+    function createRegion(region, index) {
+        const regionElement = document.createElement('div');
+        regionElement.className = 'region';
+        if (region.selected) regionElement.classList.add('selected');
+
+        const cellsElement = document.createElement('div');
+        cellsElement.className = 'cells';
+
+        for (let i = 0; i < CELLS_PER_REGION; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            if (i < region.youngObjects) {
+                cell.classList.add('young');
+            } else if (i < region.youngObjects + region.oldObjects) {
+                cell.classList.add('old');
+            } else if (i < region.filledCells) {
+                cell.classList.add('garbage');
+            } else {
+                cell.classList.add('empty');
+            }
+            cellsElement.appendChild(cell);
+        }
+
+        const labelElement = document.createElement('div');
+        labelElement.className = 'label';
+        labelElement.textContent = `Region ${index + 1} (${region.youngObjects} young, ${region.oldObjects} old, ${region.garbageCells} garbage)`;
+
+        regionElement.appendChild(cellsElement);
+        regionElement.appendChild(labelElement);
+
+        return regionElement;
+    }
+
+    function renderHeap() {
+        const heapElement = document.getElementById('heap');
+        heapElement.innerHTML = '';
+        heapRegions.forEach((region, index) => {
+            heapElement.appendChild(createRegion(region, index));
+        });
+    }
+
+    function generateMoreObjects() {
+        heapRegions.forEach(region => {
+            const emptySpace = CELLS_PER_REGION - region.filledCells;
+            const newObjects = Math.floor(Math.random() * (emptySpace / 2) + 1);
+
+            const newYoungObjects = Math.floor(Math.random() * (newObjects + 1));
+            const newOldObjects = newObjects - newYoungObjects;
+
+            region.youngObjects += newYoungObjects;
+            region.oldObjects += newOldObjects;
+            region.filledCells += newObjects;
+
+            if (region.isYoung && region.oldObjects > 0) {
+                region.isYoung = false;
+            }
+        });
+        renderHeap();
+        updateButtons();
+        document.getElementById('status').textContent = "Generated more young and old objects in the heap";
+    }
+
+    function generateGarbage() {
+        heapRegions.forEach(region => {
+            const maxGarbage = Math.min(region.filledCells, Math.floor(region.filledCells * 0.7));
+            region.garbageCells = Math.floor(Math.random() * (maxGarbage + 1));
+
+            const youngGarbage = Math.min(region.youngObjects, Math.floor(Math.random() * (region.garbageCells + 1)));
+            const oldGarbage = region.garbageCells - youngGarbage;
+
+            region.youngObjects -= youngGarbage;
+            region.oldObjects -= oldGarbage;
+        });
+    }
+
+    function markGarbage() {
+        generateGarbage();
+        const regionCount = parseInt(document.getElementById('regionCount').value);
+        markedRegions = heapRegions
+            .map((region, index) => ({...region, index}))
+            .sort((a, b) => b.garbageCells - a.garbageCells)
+            .slice(0, regionCount);
+
+        heapRegions.forEach(region => region.marked = false);
+        markedRegions.forEach(region => {
+            heapRegions[region.index].marked = true;
+        });
+
+        renderHeap();
+        updateButtons();
+        document.getElementById('status').textContent = `Garbage generated`;
+    }
+
+    function selectRegions() {
+        selectedRegions = markedRegions;
+        heapRegions.forEach(region => region.selected = false);
+        selectedRegions.forEach(region => {
+            heapRegions[region.index].selected = true;
+        });
+        renderHeap();
+        updateButtons();
+        document.getElementById('status').textContent = `Selected ${selectedRegions.length} regions for collection`;
+    }
+
+    function evacuateAndCompact() {
+        if (hasEvacuated) {
+            document.getElementById('status').textContent = "Evacuation already performed. Generate more objects to continue.";
+            return;
+        }
+
+        selectedRegions.forEach(region => {
+            const index = region.index;
+            heapRegions[index].garbageCells = 0;
+            heapRegions[index].filledCells -= region.garbageCells;
+            heapRegions[index].marked = false;
+            heapRegions[index].selected = false;
+        });
+
+        hasEvacuated = true;
+        renderHeap();
+        updateButtons();
+        document.getElementById('status').textContent = "Garbage collected and regions compacted. Generate more objects to continue.";
+    }
+
+    function removeAllObjects() {
+        heapRegions.forEach(region => {
+            region.youngObjects = 0;
+            region.oldObjects = 0;
+            region.garbageCells = 0;
+            region.filledCells = 0;
+            region.marked = false;
+            region.selected = false;
+        });
+        markedRegions = [];
+        selectedRegions = [];
+        hasEvacuated = false;
+        renderHeap();
+        updateButtons();
+        document.getElementById('status').textContent = "All objects removed from the heap";
+    }
+
+    function updateButtons() {
+        document.getElementById('mark').disabled = markedRegions.length > 0;
+        document.getElementById('select').disabled = markedRegions.length === 0 || selectedRegions.length > 0;
+        document.getElementById('evacuate').disabled = selectedRegions.length === 0 || hasEvacuated;
+        document.getElementById('generateObjects').disabled = false;
+        document.getElementById('removeAll').disabled = heapRegions.every(region => region.filledCells === 0);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeHeap();
+
+        document.getElementById('generateObjects').addEventListener('click', () => {
+            generateMoreObjects();
+            markedRegions = [];
+            selectedRegions = [];
+            hasEvacuated = false;
+            updateButtons();
+        });
+        document.getElementById('mark').addEventListener('click', markGarbage);
+        document.getElementById('select').addEventListener('click', selectRegions);
+        document.getElementById('evacuate').addEventListener('click', evacuateAndCompact);
+        document.getElementById('removeAll').addEventListener('click', removeAllObjects);
+    });
+</script>
+</body>
+</html>

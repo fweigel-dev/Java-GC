@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Reachability and Garbage Collection (GC)</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .content {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        #controlPanel {
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4299E1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #3182CE;
+        }
+
+        #canvas {
+            border: 1px solid #ccc;
+            background-color: white;
+        }
+
+        @keyframes nodeAppear {
+            from {
+                r: 0;
+            }
+            to {
+                r: 15;
+            }
+        }
+
+        @keyframes edgeDraw {
+            from {
+                stroke-dashoffset: 100;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .node {
+            animation: nodeAppear 0.5s ease-out;
+        }
+
+        .edge {
+            stroke-dasharray: 100;
+            animation: edgeDraw 0.5s ease-out;
+            cursor: pointer;
+        }
+
+        .grid-line {
+            stroke: #e2e8f0;
+            stroke-width: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <h1>Object Reachability and Garbage Collection (GC)</h1>
+
+    <svg id="canvas" width="560" height="400" viewBox="0 0 600 400"></svg>
+    <div id="controlPanel">
+        <button id="toggleButton">Start Generation</button>
+        <button id="gcButton">Run Garbage Collection</button>
+    </div>
+</div>
+<script>
+    const GRID_SIZE = 80;
+    const CANVAS_WIDTH = 600;
+    const CANVAS_HEIGHT = 400;
+    const ROWS = Math.floor(CANVAS_HEIGHT / GRID_SIZE);
+    const COLS = Math.floor(CANVAS_WIDTH / GRID_SIZE);
+    const NODE_RADIUS = 15;
+    const EDGE_OVERLAP = 2;
+    const MAX_CONNECTION_DISTANCE = GRID_SIZE * 1.5;
+
+    let nodes = [];
+    let edges = [];
+    let grid = Array(ROWS).fill().map(() => Array(COLS).fill(false));
+    let isRunning = false;
+    let interval;
+
+    const canvas = document.getElementById('canvas');
+    const toggleButton = document.getElementById('toggleButton');
+    const gcButton = document.getElementById('gcButton');
+
+    function createSVGElement(type) {
+        return document.createElementNS('http://www.w3.org/2000/svg', type);
+    }
+
+    function isPositionOccupied(row, col) {
+        return grid[row][col];
+    }
+
+    function findAvailablePosition() {
+        const availablePositions = [];
+
+        for (let row = 0; row < ROWS; row++) {
+            for (let col = 0; col < COLS; col++) {
+                if (!isPositionOccupied(row, col)) {
+                    availablePositions.push({row, col});
+                }
+            }
+        }
+
+        if (availablePositions.length === 0) return null;
+
+        return availablePositions[Math.floor(Math.random() * availablePositions.length)];
+    }
+
+    function distance(node1, node2) {
+        const dx = node1.col - node2.col;
+        const dy = node1.row - node2.row;
+        return Math.sqrt(dx * dx + dy * dy) * GRID_SIZE;
+    }
+
+    function doesEdgeCross(edge1, edge2) {
+        const ccw = (A, B, C) => (C.col - A.col) * (B.row - A.row) > (B.col - A.col) * (C.row - A.row);
+        return ccw(edge1.start, edge1.end, edge2.start) !== ccw(edge1.start, edge1.end, edge2.end) &&
+            ccw(edge2.start, edge2.end, edge1.start) !== ccw(edge2.start, edge2.end, edge1.end);
+    }
+
+    function findValidParent(newNode) {
+        const validParents = nodes.filter(node => {
+            if (!node.isReachable) return false;
+            const dist = distance(node, newNode);
+            if (dist <= 0 || dist > MAX_CONNECTION_DISTANCE) return false;
+
+            const potentialEdge = {start: node, end: newNode};
+            return !edges.some(existingEdge => doesEdgeCross(potentialEdge, existingEdge));
+        });
+
+        return validParents.length > 0 ? validParents[Math.floor(Math.random() * validParents.length)] : null;
+    }
+
+    function addNode() {
+        for (let attempts = 0; attempts < 10; attempts++) {
+            const position = findAvailablePosition();
+            if (!position) return;
+
+            const newNode = {
+                id: Date.now(),
+                row: position.row,
+                col: position.col,
+                x: position.col * GRID_SIZE + GRID_SIZE / 2,
+                y: position.row * GRID_SIZE + GRID_SIZE / 2,
+                isRoot: nodes.length === 0,
+                isReachable: true,
+            };
+
+            const parentNode = nodes.length > 0 ? findValidParent(newNode) : null;
+
+            if (parentNode || nodes.length === 0) {
+                nodes.push(newNode);
+                grid[position.row][position.col] = true;
+
+                if (parentNode) {
+                    edges.push({start: parentNode, end: newNode, isReachable: true});
+                }
+
+                renderNode(newNode);
+                if (parentNode) {
+                    renderEdge(edges[edges.length - 1]);
+                }
+                return;
+            }
+        }
+        setTimeout(addNode, 500);
+    }
+
+    function isNodeReachable(node, removedEdge, visitedNodes = new Set()) {
+        if (node.isRoot) return true;
+        if (visitedNodes.has(node)) return false;
+
+        visitedNodes.add(node);
+
+        return edges.some(edge => {
+            if (edge === removedEdge) return false;
+            if (edge.start === node && isNodeReachable(edge.end, removedEdge, visitedNodes)) return true;
+            if (edge.end === node && isNodeReachable(edge.start, removedEdge, visitedNodes)) return true;
+            return false;
+        });
+    }
+
+    function removeEdge(edgeToRemove) {
+        nodes.forEach(node => {
+            node.isReachable = isNodeReachable(node, edgeToRemove);
+        });
+
+        edges.forEach(edge => {
+            edge.isReachable = edge.start.isReachable && edge.end.isReachable;
+        });
+
+        edges = edges.filter(edge => edge !== edgeToRemove);
+
+        renderAll();
+    }
+
+    function runGarbageCollection() {
+        const reachableNodes = nodes.filter(node => node.isReachable);
+        const removedNodes = nodes.filter(node => !node.isReachable);
+
+        removedNodes.forEach(node => {
+            grid[node.row][node.col] = false;
+        });
+
+        nodes = reachableNodes;
+        edges = edges.filter(edge => edge.start.isReachable && edge.end.isReachable);
+
+        renderAll();
+    }
+
+    function renderNode(node) {
+        const circle = createSVGElement('circle');
+        circle.setAttribute('cx', node.x);
+        circle.setAttribute('cy', node.y);
+        circle.setAttribute('r', NODE_RADIUS);
+        circle.setAttribute('fill', node.isRoot ? '#4299E1' : (node.isReachable ? '#48BB78' : '#F56565'));
+        circle.classList.add('node');
+        canvas.appendChild(circle);
+    }
+
+    function renderEdge(edge) {
+        const dx = edge.end.x - edge.start.x;
+        const dy = edge.end.y - edge.start.y;
+        const angle = Math.atan2(dy, dx);
+
+        const startX = edge.start.x + (NODE_RADIUS - EDGE_OVERLAP) * Math.cos(angle);
+        const startY = edge.start.y + (NODE_RADIUS - EDGE_OVERLAP) * Math.sin(angle);
+        const endX = edge.end.x - (NODE_RADIUS - EDGE_OVERLAP) * Math.cos(angle);
+        const endY = edge.end.y - (NODE_RADIUS - EDGE_OVERLAP) * Math.sin(angle);
+
+        const midX = (startX + endX) / 2;
+        const midY = (startY + endY) / 2;
+
+        const path = createSVGElement('path');
+        path.setAttribute('d', `M${startX},${startY} Q${midX},${midY} ${endX},${endY}`);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', edge.isReachable ? '#2D3748' : '#FC8181');
+        path.setAttribute('stroke-width', 2);
+        path.classList.add('edge');
+        path.addEventListener('click', () => removeEdge(edge));
+        canvas.appendChild(path);
+    }
+
+    function renderGrid() {
+        const actualWidth = COLS * GRID_SIZE;
+        const actualHeight = ROWS * GRID_SIZE;
+
+        for (let i = 0; i <= ROWS; i++) {
+            const line = createSVGElement('line');
+            line.setAttribute('x1', 0);
+            line.setAttribute('y1', i * GRID_SIZE);
+            line.setAttribute('x2', actualWidth);
+            line.setAttribute('y2', i * GRID_SIZE);
+            line.classList.add('grid-line');
+            canvas.appendChild(line);
+        }
+        for (let i = 0; i <= COLS; i++) {
+            const line = createSVGElement('line');
+            line.setAttribute('x1', i * GRID_SIZE);
+            line.setAttribute('y1', 0);
+            line.setAttribute('x2', i * GRID_SIZE);
+            line.setAttribute('y2', actualHeight);
+            line.classList.add('grid-line');
+            canvas.appendChild(line);
+        }
+
+        canvas.setAttribute('viewBox', `0 0 ${actualWidth} ${actualHeight}`);
+    }
+
+    function renderAll() {
+        canvas.innerHTML = '';
+        renderGrid();
+        edges.forEach(renderEdge);
+        nodes.forEach(renderNode);
+    }
+
+    function toggleRunning() {
+        isRunning = !isRunning;
+        toggleButton.textContent = isRunning ? 'Stop Generation' : 'Start Generation';
+        if (isRunning) {
+            interval = setInterval(addNode, 750);
+        } else {
+            clearInterval(interval);
+        }
+    }
+
+    toggleButton.addEventListener('click', toggleRunning);
+    gcButton.addEventListener('click', runGarbageCollection);
+
+    renderGrid();
+</script>
+</body>
+</html>
