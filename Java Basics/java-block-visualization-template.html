@@ -105,8 +105,7 @@
     </div>
 
     <script>
-        const javaCode = `
-/* Dies ist ein Multiline-Kommentar
+        const javaCode = `/* Dies ist ein Multiline-Kommentar
 
    Er erklärt den Zweck des Programms */
 public class VisualisierungsBeispiel {
@@ -178,6 +177,8 @@ public class VisualisierungsBeispiel {
                     } else {
                         return;
                     }
+                } else if (trimmedLine === '') {
+                    tokens.push({ token: '', type: 'empty-line' });
                 } else {
                     tokens.push(...tokenizeLine(trimmedLine));
                 }
@@ -285,6 +286,12 @@ public class VisualisierungsBeispiel {
                 const lineDiv = document.createElement('div');
                 lineDiv.style.paddingLeft = `${indentation * 0.5}rem`;
 
+                if (tokens.length === 1 && tokens[0].type === 'empty-line') {
+                    lineDiv.innerHTML = '&nbsp;';
+                    codeDisplay.appendChild(lineDiv);
+                    return;
+                }
+
                 tokens.forEach(({ token, type }) => {
                     if (type === 'space') {
                         lineDiv.appendChild(document.createTextNode(' '));
@@ -301,9 +308,7 @@ public class VisualisierungsBeispiel {
                     }
                 });
 
-                if (lineDiv.childNodes.length > 0) {
                 codeDisplay.appendChild(lineDiv);
-                }
             });
         }
 
