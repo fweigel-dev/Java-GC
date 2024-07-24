@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Was ist eine Variable in Java?</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .slide {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 1000px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .description {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: #34495e;
+        }
+        #codeDisplay {
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #f7f9fb;
+            border: 1px solid #e1e8ed;
+            border-radius: 5px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+        .block {
+            display: inline-block;
+            margin: 2px;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .multiline-comment {
+            display: block;
+            margin: 2px 0;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .keyword { background-color: #BFDBFE; color: #1e3a8a; }
+        .variableType { background-color: #DDD6FE; color: #5b21b6; }
+        .operator { background-color: #FCE7F3; color: #9d174d; }
+        .number { background-color: #BBF7D0; color: #166534; }
+        .identifier { background-color: #FEF08A; color: #854d0e; }
+        .semicolon { background-color: #FECACA; color: #991b1b; }
+        .string { background-color: #99F6E4; color: #115e59; }
+        .method { background-color: #C7D2FE; color: #3730a3; }
+        .comment, .multiline-comment { background-color: #86EFAC; color: #166534; }
+        .bracket { background-color: #FED7AA; color: #9a3412; }
+        .legend {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.8em;
+        }
+        .legend-item {
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .explanation {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <h1>Was ist eine Variable in Java?</h1>
+        <p class="description">
+           Stell dir eine Variable wie eine beschriftete Box vor, in der du etwas aufbewahren kannst!
+        </p>
+        <div id="codeDisplay"></div>
+        <div class="explanation">
+            <p>In diesem Beispiel:</p>
+            <ul>
+                <li><strong>int</strong> ist der Typ der Box. Er sagt uns, dass wir hier ganze Zahlen speichern können.</li>
+                <li><strong>meineZahl</strong> ist der Name, den wir der Box geben. So können wir sie später wiederfinden.</li>
+                <li><strong>10</strong> ist der Wert, den wir in die Box legen.</li>
+                <li>Das <strong>Semikolon ;</strong> zeigt das Ende dieser Anweisung an.</li>
+            </ul>
+            <p>Jetzt können wir <strong>meineZahl</strong> überall in unserem Programm verwenden, wo wir die Zahl 10 brauchen!</p>
+        </div>
+        <div class="legend">
+            <span class="legend-item variableType">Variablentyp</span>
+            <span class="legend-item identifier">Variablenname</span>
+            <span class="legend-item operator">Zuweisungsoperator</span>
+            <span class="legend-item number">Zahlenwert</span>
+            <span class="legend-item semicolon">Semikolon</span>
+        </div>
+    </div>
+
+    <script>
+        const javaCode = `int meineZahl = 10;`;
+
+        function parseJavaCode(code) {
+
+            const lines = code.split('\n');
+            let inMultiLineComment = false;
+            let multiLineCommentContent = '';
+            const parsedLines = [];
+
+            lines.forEach((line, lineIndex) => {
+                const trimmedLine = line.trimLeft();
+                const indentation = line.length - trimmedLine.length;
+                const tokens = [];
+
+                if (inMultiLineComment) {
+                    if (trimmedLine.includes('*/')) {
+                        const [commentPart, codePart] = trimmedLine.split('*/', 2);
+                        multiLineCommentContent += commentPart + '*/';
+                        tokens.push({ token: multiLineCommentContent, type: 'multiline-comment' });
+                        inMultiLineComment = false;
+                        multiLineCommentContent = '';
+                        if (codePart) {
+                            tokens.push(...tokenizeLine(codePart.trimLeft()));
+                        }
+                    } else {
+                        multiLineCommentContent += line + '\n';
+                        return;
+                    }
+                } else if (trimmedLine.startsWith('/*')) {
+                    inMultiLineComment = true;
+                    multiLineCommentContent = line + '\n';
+                    if (trimmedLine.includes('*/')) {
+                        tokens.push({ token: multiLineCommentContent.trim(), type: 'multiline-comment' });
+                        inMultiLineComment = false;
+                        multiLineCommentContent = '';
+                    } else {
+                        return;
+                    }
+                } else if (trimmedLine === '') {
+                    tokens.push({ token: '', type: 'empty-line' });
+                } else {
+                    tokens.push(...tokenizeLine(trimmedLine));
+                }
+
+                parsedLines.push({ indentation, tokens });
+            });
+
+            return parsedLines;
+        }
+
+        function tokenizeLine(line) {
+                const tokens = [];
+                let currentToken = '';
+                let inString = false;
+                let i = 0;
+
+            while (i < line.length) {
+                const char = line[i];
+                const nextChar = line[i + 1];
+
+                    if (char === '/' && nextChar === '/') {
+                        if (currentToken) {
+                            tokens.push(categorizeToken(currentToken));
+                            currentToken = '';
+                        }
+                    tokens.push({ token: line.slice(i), type: 'comment' });
+                        break;
+                    }
+
+                    if (char === '"' && !inString) {
+                        if (currentToken) {
+                            tokens.push(categorizeToken(currentToken));
+                            currentToken = '';
+                        }
+                        inString = true;
+                        currentToken += char;
+                    } else if (char === '"' && inString) {
+                        currentToken += char;
+                        tokens.push({ token: currentToken, type: 'string' });
+                        currentToken = '';
+                        inString = false;
+                    } else if (inString) {
+                        currentToken += char;
+                    } else if (char === '(' || char === ')' || char === '{' || char === '}') {
+                        if (currentToken) {
+                            tokens.push(categorizeToken(currentToken));
+                            currentToken = '';
+                        }
+                        tokens.push({ token: char, type: 'bracket' });
+                    } else if (char === '[' || char === ']') {
+                        currentToken += char;
+                    } else if (char === ';') {
+                        if (currentToken) {
+                            tokens.push(categorizeToken(currentToken));
+                            currentToken = '';
+                        }
+                        tokens.push({ token: ';', type: 'semicolon' });
+                    } else if (char === ' ') {
+                        if (currentToken) {
+                            tokens.push(categorizeToken(currentToken));
+                            currentToken = '';
+                        }
+                        tokens.push({ token: ' ', type: 'space' });
+                    } else {
+                        currentToken += char;
+                    }
+                    i++;
+                }
+
+                if (currentToken) {
+                        tokens.push(categorizeToken(currentToken));
+                    }
+
+            return tokens;
+        }
+
+        function categorizeToken(token) {
+            const keywords = ['if', 'else', 'for', 'while', 'class', 'public', 'private', 'static', 'void', 'return'];
+            const operators = ['=', '<', '>', '<=', '>=', '==', '!=', '+', '-', '*', '/', '%', '++', '--'];
+            const variableTypes = ['int', 'double', 'float', 'long', 'boolean', 'char', 'byte', 'short', 'String'];
+
+            let type = 'default';
+            if (keywords.includes(token)) {
+                type = 'keyword';
+            } else if (operators.includes(token)) {
+                type = 'operator';
+            } else if (variableTypes.includes(token) || variableTypes.some(vt => token.startsWith(vt) && token.includes('['))) {
+                type = 'variableType';
+            } else if (!isNaN(token) || token.includes('.') && !isNaN(parseFloat(token))) {
+                type = 'number';
+            } else if (token.match(/^[a-zA-Z_$][a-zA-Z_$0-9]*$/)) {
+                type = 'identifier';
+            } else if (token === 'System.out.println') {
+                type = 'method';
+            }
+
+            return { token, type };
+        }
+
+        function renderBlocks(parsedLines) {
+            const codeDisplay = document.getElementById('codeDisplay');
+            codeDisplay.innerHTML = '';
+
+            parsedLines.forEach(({ indentation, tokens }) => {
+                const lineDiv = document.createElement('div');
+                lineDiv.style.paddingLeft = `${indentation * 0.5}rem`;
+
+                if (tokens.length === 1 && tokens[0].type === 'empty-line') {
+                    lineDiv.innerHTML = '&nbsp;';
+                    codeDisplay.appendChild(lineDiv);
+                    return;
+                }
+
+                tokens.forEach(({ token, type }) => {
+                    if (type === 'space') {
+                        lineDiv.appendChild(document.createTextNode(' '));
+                    } else if (type === 'multiline-comment') {
+                        const commentDiv = document.createElement('div');
+                        commentDiv.textContent = token;
+                        commentDiv.className = `multiline-comment ${type}`;
+                        codeDisplay.appendChild(commentDiv);
+                    } else {
+                        const span = document.createElement('span');
+                        span.textContent = token;
+                        span.className = `block ${type}`;
+                        lineDiv.appendChild(span);
+                    }
+                });
+
+                codeDisplay.appendChild(lineDiv);
+            });
+        }
+
+        const parsedLines = parseJavaCode(javaCode);
+        renderBlocks(parsedLines);
+    </script>
+</body>
+</html>
