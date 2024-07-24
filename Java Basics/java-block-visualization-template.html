@@ -53,6 +53,13 @@
             border-radius: 4px;
             font-size: 0.9em;
         }
+        .multiline-comment {
+            display: block;
+            margin: 2px 0;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
         .keyword { background-color: #BFDBFE; color: #1e3a8a; }
         .variableType { background-color: #DDD6FE; color: #5b21b6; }
         .operator { background-color: #FCE7F3; color: #9d174d; }
@@ -61,7 +68,7 @@
         .semicolon { background-color: #FECACA; color: #991b1b; }
         .string { background-color: #99F6E4; color: #115e59; }
         .method { background-color: #C7D2FE; color: #3730a3; }
-        .comment { background-color: #86EFAC; color: #166534; }
+        .comment, .multiline-comment { background-color: #86EFAC; color: #166534; }
         .bracket { background-color: #FED7AA; color: #9a3412; }
         .legend {
             margin-top: 20px;
@@ -136,58 +143,68 @@ public class VisualisierungsBeispiel {
         `;
 
         function parseJavaCode(code) {
-            const keywords = ['if', 'else', 'for', 'while', 'class', 'public', 'private', 'static', 'void', 'return'];
-            const operators = ['=', '<', '>', '<=', '>=', '==', '!=', '+', '-', '*', '/', '%', '++', '--'];
-            const variableTypes = ['int', 'double', 'float', 'long', 'boolean', 'char', 'byte', 'short', 'String'];
 
             const lines = code.split('\n');
             let inMultiLineComment = false;
+            let multiLineCommentContent = '';
+            const parsedLines = [];
 
-            return lines.map((line, lineIndex) => {
+            lines.forEach((line, lineIndex) => {
                 const trimmedLine = line.trimLeft();
                 const indentation = line.length - trimmedLine.length;
+                const tokens = [];
 
+                if (inMultiLineComment) {
+                    if (trimmedLine.includes('*/')) {
+                        const [commentPart, codePart] = trimmedLine.split('*/', 2);
+                        multiLineCommentContent += commentPart + '*/';
+                        tokens.push({ token: multiLineCommentContent, type: 'multiline-comment' });
+                        inMultiLineComment = false;
+                        multiLineCommentContent = '';
+                        if (codePart) {
+                            tokens.push(...tokenizeLine(codePart.trimLeft()));
+                        }
+                    } else {
+                        multiLineCommentContent += line + '\n';
+                        return;
+                    }
+                } else if (trimmedLine.startsWith('/*')) {
+                    inMultiLineComment = true;
+                    multiLineCommentContent = line + '\n';
+                    if (trimmedLine.includes('*/')) {
+                        tokens.push({ token: multiLineCommentContent.trim(), type: 'multiline-comment' });
+                        inMultiLineComment = false;
+                        multiLineCommentContent = '';
+                    } else {
+                        return;
+                    }
+                } else {
+                    tokens.push(...tokenizeLine(trimmedLine));
+                }
+
+                parsedLines.push({ indentation, tokens });
+            });
+
+            return parsedLines;
+        }
+
+        function tokenizeLine(line) {
                 const tokens = [];
                 let currentToken = '';
                 let inString = false;
                 let i = 0;
 
-                while (i < trimmedLine.length) {
-                    const char = trimmedLine[i];
-                    const nextChar = trimmedLine[i + 1];
-
-                    if (inMultiLineComment) {
-                        if (char === '*' && nextChar === '/') {
-                            currentToken += '*/';
-                            tokens.push({ token: currentToken, type: 'comment' });
-                            currentToken = '';
-                            inMultiLineComment = false;
-                            i += 2;
-                            continue;
-                        }
-                        currentToken += char;
-                        i++;
-                        continue;
-                    }
+            while (i < line.length) {
+                const char = line[i];
+                const nextChar = line[i + 1];
 
                     if (char === '/' && nextChar === '/') {
                         if (currentToken) {
                             tokens.push(categorizeToken(currentToken));
                             currentToken = '';
                         }
-                        tokens.push({ token: trimmedLine.slice(i), type: 'comment' });
+                    tokens.push({ token: line.slice(i), type: 'comment' });
                         break;
-                    }
-
-                    if (char === '/' && nextChar === '*') {
-                        if (currentToken) {
-                            tokens.push(categorizeToken(currentToken));
-                            currentToken = '';
-                        }
-                        inMultiLineComment = true;
-                        currentToken = '/*';
-                        i += 2;
-                        continue;
                     }
 
                     if (char === '"' && !inString) {
@@ -231,15 +248,10 @@ public class VisualisierungsBeispiel {
                 }
 
                 if (currentToken) {
-                    if (inMultiLineComment) {
-                        tokens.push({ token: currentToken, type: 'comment' });
-                    } else {
                         tokens.push(categorizeToken(currentToken));
                     }
-                }
 
-                return { indentation, tokens };
-            });
+            return tokens;
         }
 
         function categorizeToken(token) {
@@ -276,6 +288,11 @@ public class VisualisierungsBeispiel {
                 tokens.forEach(({ token, type }) => {
                     if (type === 'space') {
                         lineDiv.appendChild(document.createTextNode(' '));
+                    } else if (type === 'multiline-comment') {
+                        const commentDiv = document.createElement('div');
+                        commentDiv.textContent = token;
+                        commentDiv.className = `multiline-comment ${type}`;
+                        codeDisplay.appendChild(commentDiv);
                     } else {
                         const span = document.createElement('span');
                         span.textContent = token;
@@ -284,7 +301,9 @@ public class VisualisierungsBeispiel {
                     }
                 });
 
+                if (lineDiv.childNodes.length > 0) {
                 codeDisplay.appendChild(lineDiv);
+                }
             });
         }
 
