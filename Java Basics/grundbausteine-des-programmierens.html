@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .slide {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 1000px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .description {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: #34495e;
+        }
+        .process-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin-top: 40px;
+        }
+        .process-step {
+            text-align: center;
+            width: 30%;
+        }
+        .process-icon {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+        .process-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #2980b9;
+        }
+        .process-description {
+            font-size: 1em;
+            color: #555;
+            text-align: left;
+        }
+        .example {
+            background-color: #e8f4fc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <h1>Grundbausteine des Programmierens</h1>
+        <p class="description">
+            Beim Programmieren gibt es drei wichtige Grundbausteine: Variablen, Operationen und Kontrollstrukturen.
+            Diese helfen uns, Anweisungen für den Computer zu erstellen und zu organisieren.
+        </p>
+        <div class="process-container">
+            <div class="process-step">
+                <div class="process-icon">📦</div>
+                <div class="process-title">Variablen</div>
+                <div class="process-description">
+                    Variablen sind wie Behälter, in denen wir Informationen speichern können.
+                    <div class="example">
+                        int alter = 10;<br>
+                        String name = "Max";
+                    </div>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="process-icon">🔢</div>
+                <div class="process-title">Operationen</div>
+                <div class="process-description">
+                    Operationen sind Aktionen, die wir mit Variablen durchführen können, wie Addieren oder Vergleichen.
+                    <div class="example">
+                        int summe = 5 + 3;<br>
+                        boolean istGroesser = 10 > 5;
+                    </div>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="process-icon">🔀</div>
+                <div class="process-title">Kontrollstrukturen</div>
+                <div class="process-description">
+                    Kontrollstrukturen steuern den Ablauf des Programms, z.B. durch Wiederholungen oder Entscheidungen.
+                    <div class="example">
+                        if (alter >= 18)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print("Erwachsen");<br>
+                        else<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print("Kind");
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
