@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Max Implementierung - Interaktiv</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .slide {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 1000px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .description {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: #34495e;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+        #actionBtn {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #actionBtn:hover {
+            background-color: #2980b9;
+        }
+        #actionBtn.reset {
+            background-color: #e74c3c;
+        }
+        #actionBtn.reset:hover {
+            background-color: #c0392b;
+        }
+        .node text {
+            font-weight: bold;
+        }
+        .highlighted {
+            stroke: #e74c3c !important;
+            stroke-width: 4px !important;
+        }
+    </style>
+</head>
+<body>
+<div class="slide">
+    <h1>Mini Max Implementierung - Interaktiv</h1>
+    <div class="description">
+    </div>
+    <svg width="800" height="400" viewBox="0 0 800 400">
+        <!-- Tree structure -->
+        <line x1="400" y1="50" x2="200" y2="150" stroke="black" />
+        <line x1="400" y1="50" x2="600" y2="150" stroke="black" />
+        <line x1="200" y1="150" x2="100" y2="250" stroke="black" />
+        <line x1="200" y1="150" x2="300" y2="250" stroke="black" />
+        <line x1="600" y1="150" x2="500" y2="250" stroke="black" />
+        <line x1="600" y1="150" x2="700" y2="250" stroke="black" />
+        <line x1="100" y1="250" x2="50" y2="350" stroke="black" />
+        <line x1="100" y1="250" x2="150" y2="350" stroke="black" />
+        <line x1="300" y1="250" x2="250" y2="350" stroke="black" />
+        <line x1="300" y1="250" x2="350" y2="350" stroke="black" />
+        <line x1="500" y1="250" x2="450" y2="350" stroke="black" />
+        <line x1="500" y1="250" x2="550" y2="350" stroke="black" />
+        <line x1="700" y1="250" x2="650" y2="350" stroke="black" />
+        <line x1="700" y1="250" x2="750" y2="350" stroke="black" />
+
+        <!-- Nodes -->
+        <g class="node" id="node-400-50">
+            <circle cx="400" cy="50" r="20" fill="white" stroke="black" stroke-width="2"/>
+            <text x="400" y="50" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        </g>
+        <g class="node" id="node-200-150">
+            <circle cx="200" cy="150" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="200" y="150" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
+        <g class="node" id="node-600-150">
+            <circle cx="600" cy="150" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="600" y="150" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
+        <g class="node" id="node-100-250">
+            <circle cx="100" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
+            <text x="100" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        </g>
+        <g class="node" id="node-300-250">
+            <circle cx="300" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
+            <text x="300" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        </g>
+        <g class="node" id="node-500-250">
+            <circle cx="500" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
+            <text x="500" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        </g>
+        <g class="node" id="node-700-250">
+            <circle cx="700" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
+            <text x="700" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        </g>
+        <g class="node" id="node-50-350">
+            <circle cx="50" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="50" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
+        <g class="node" id="node-150-350">
+            <circle cx="150" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="150" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
+        <g class="node" id="node-250-350">
+            <circle cx="250" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="250" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
+        <g class="node" id="node-350-350">
+            <circle cx="350" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="350" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
+        <g class="node" id="node-450-350">
+            <circle cx="450" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="450" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
+        <g class="node" id="node-550-350">
+            <circle cx="550" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="550" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
+        <g class="node" id="node-650-350">
+            <circle cx="650" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="650" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
+        <g class="node" id="node-750-350">
+            <circle cx="750" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="750" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
+    </svg>
+</div>
+<button id="actionBtn">Nächster Schritt</button>
+
+<script>
+    const nodes = [
+        {id: 'node-50-350', value: null},
+        {id: 'node-150-350', value: null},
+        {id: 'node-100-250', value: null},
+        {id: 'node-250-350', value: null},
+        {id: 'node-350-350', value: null},
+        {id: 'node-300-250', value: null},
+        {id: 'node-200-150', value: null},
+        {id: 'node-450-350', value: null},
+        {id: 'node-550-350', value: null},
+        {id: 'node-500-250', value: null},
+        {id: 'node-650-350', value: null},
+        {id: 'node-750-350', value: null},
+        {id: 'node-700-250', value: null},
+        {id: 'node-600-150', value: null},
+        {id: 'node-400-50', value: null}
+    ];
+
+    let currentNodeIndex = 0;
+
+    function getRandomValue() {
+        return Math.floor(Math.random() * 3) - 1; // Returns -1, 0, or 1
+    }
+
+    function updateNodeValue(node, value) {
+        const nodeElement = document.getElementById(node.id);
+        const textElement = nodeElement.querySelector('text');
+        textElement.textContent = value;
+    }
+
+    function highlightNode(nodeId) {
+        const nodeElement = document.getElementById(nodeId);
+        nodeElement.classList.add('highlighted');
+    }
+
+    function removeHighlight(nodeId) {
+        const nodeElement = document.getElementById(nodeId);
+        nodeElement.classList.remove('highlighted');
+    }
+
+    function minimax(depth, isMaximizing) {
+        if (depth === 3) {
+            return getRandomValue();
+        }
+
+        if (isMaximizing) {
+            let bestValue = -Infinity;
+            for (let i = 0; i < 2; i++) {
+                let value = minimax(depth + 1, false);
+                bestValue = Math.max(bestValue, value);
+            }
+            return bestValue;
+        } else {
+            let bestValue = Infinity;
+            for (let i = 0; i < 2; i++) {
+                let value = minimax(depth + 1, true);
+                bestValue = Math.min(bestValue, value);
+            }
+            return bestValue;
+        }
+    }
+
+    function nextStep() {
+        if (currentNodeIndex < nodes.length) {
+            const currentNode = nodes[currentNodeIndex];
+            highlightNode(currentNode.id);
+
+            if (currentNode.id.includes('350')) {
+                // Leaf nodes
+                currentNode.value = getRandomValue();
+            } else {
+                // Internal nodes
+                const isMaximizing = currentNode.id.includes('250') || currentNode.id.includes('50');
+                const depth = currentNode.id.includes('250') ? 2 : (currentNode.id.includes('150') ? 1 : 0);
+                currentNode.value = minimax(depth, isMaximizing);
+            }
+
+            updateNodeValue(currentNode, currentNode.value);
+
+            if (currentNodeIndex > 0) {
+                removeHighlight(nodes[currentNodeIndex - 1].id);
+            }
+
+            currentNodeIndex++;
+
+            if (currentNodeIndex === nodes.length) {
+                const actionBtn = document.getElementById('actionBtn');
+                actionBtn.textContent = 'Reset';
+                actionBtn.classList.add('reset');
+            }
+        }
+    }
+
+    function resetTree() {
+        nodes.forEach(node => {
+            updateNodeValue(node, node.id.includes('350') ? 'O' : (node.id.includes('250') || node.id.includes('50') ? 'X' : 'O'));
+            removeHighlight(node.id);
+        });
+        currentNodeIndex = 0;
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.textContent = 'Nächster Schritt';
+        actionBtn.classList.remove('reset');
+    }
+
+    function handleButtonClick() {
+        if (currentNodeIndex < nodes.length) {
+            nextStep();
+        } else {
+            resetTree();
+        }
+    }
+
+    document.getElementById('actionBtn').addEventListener('click', handleButtonClick);
+</script>
+</body>
+</html>

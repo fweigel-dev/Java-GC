@@ -1,79 +1,81 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mini Max Implementieren</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      background-color: #f0f4f8;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .slide {
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      padding: 40px;
-      width: 90%;
-      max-width: 1000px;
-    }
-    h1 {
-      color: #2c3e50;
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      border-bottom: 2px solid #3498db;
-      padding-bottom: 10px;
-    }
-    .description {
-      font-size: 1.1em;
-      margin-bottom: 30px;
-      color: #34495e;
-    }
-    svg {
-      max-width: 100%;
-      height: auto;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Max Implementieren</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .slide {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 1000px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .description {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: #34495e;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
 <div class="slide">
-  <h1>Mini Max Implementieren</h1>
-  <div class="description">
-    Diese Skala zeigt die möglichen Ergebnisse eines Tic-Tac-Toe-Spiels im Kontext des Mini-Max-Algorithmus.
-  </div>
-  <svg width="800" height="150" viewBox="0 0 800 150">
-    <!-- Horizontal line -->
-    <line x1="50" y1="75" x2="750" y2="75" stroke="#333" stroke-width="2" />
+    <h1>Mini Max Implementieren</h1>
+    <div class="description">
+        Bei dem Mini-Max gibt es zwei Spieler, einer der den maximalen Wert erreichen will und einer der den minimalen
+        Wert erreichen will. Bei Tic-Tac-Toe ist der maximale Wert 1, der minimale Wert -1 und der Wert für ein Unentschieden
+        0. Bei anderen Spielen gibt es auch Zwischenwerte.
+    </div>
+    <svg width="800" height="150" viewBox="0 0 800 150">
+        <!-- Horizontal line -->
+        <line x1="50" y1="75" x2="750" y2="75" stroke="#333" stroke-width="2" />
 
-    <!-- Arrow heads -->
-    <polygon points="750,75 740,70 740,80" fill="#333" />
-    <polygon points="50,75 60,70 60,80" fill="#333" />
+        <!-- Arrow heads -->
+        <polygon points="750,75 740,70 740,80" fill="#333" />
+        <polygon points="50,75 60,70 60,80" fill="#333" />
 
-    <!-- Tick marks -->
-    <line x1="250" y1="70" x2="250" y2="80" stroke="#333" stroke-width="2" />
-    <line x1="400" y1="70" x2="400" y2="80" stroke="#333" stroke-width="2" />
-    <line x1="550" y1="70" x2="550" y2="80" stroke="#333" stroke-width="2" />
+        <!-- Tick marks -->
+        <line x1="250" y1="70" x2="250" y2="80" stroke="#333" stroke-width="2" />
+        <line x1="400" y1="70" x2="400" y2="80" stroke="#333" stroke-width="2" />
+        <line x1="550" y1="70" x2="550" y2="80" stroke="#333" stroke-width="2" />
 
-    <!-- Labels -->
-    <text x="250" y="100" fill="#333" text-anchor="middle" font-size="16">-1</text>
-    <text x="400" y="100" fill="#333" text-anchor="middle" font-size="16">0</text>
-    <text x="550" y="100" fill="#333" text-anchor="middle" font-size="16">1</text>
-    <text x="550" y="130" fill="#333" text-anchor="middle" font-size="16">Maximierenden Spieler</text>
-    <text x="250" y="130" fill="#333" text-anchor="middle" font-size="16">Minimierenden Spieler</text>
+        <!-- Labels -->
+        <text x="250" y="100" fill="#333" text-anchor="middle" font-size="16">-1</text>
+        <text x="400" y="100" fill="#333" text-anchor="middle" font-size="16">0</text>
+        <text x="550" y="100" fill="#333" text-anchor="middle" font-size="16">1</text>
+        <text x="550" y="130" fill="#333" text-anchor="middle" font-size="16">Maximierenden Spieler</text>
+        <text x="250" y="130" fill="#333" text-anchor="middle" font-size="16">Minimierenden Spieler</text>
 
 
-    <text x="250" y="50" fill="#333" text-anchor="middle" font-size="18" font-weight="bold">O gewinnt</text>
-    <text x="400" y="50" fill="#333" text-anchor="middle" font-size="18" font-weight="bold">Unentschieden</text>
-    <text x="550" y="50" fill="#333" text-anchor="middle" font-size="18" font-weight="bold">X gewinnt</text>
-  </svg>
+        <text x="250" y="50" fill="#333" text-anchor="middle" font-size="18" font-weight="bold">O gewinnt</text>
+        <text x="400" y="50" fill="#333" text-anchor="middle" font-size="18" font-weight="bold">Unentschieden</text>
+        <text x="550" y="50" fill="#333" text-anchor="middle" font-size="18" font-weight="bold">X gewinnt</text>
+    </svg>
 </div>
 </body>
 </html>
