@@ -69,46 +69,50 @@
             stroke: #e74c3c !important;
             stroke-width: 4px !important;
         }
+        .turn-text {
+            font-size: 16px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 <div class="slide">
-    <h1>Mini Max Implementierung - Interaktiv</h1>
+    <h1>Mini Max Implementierung</h1>
     <div class="description">
+        X ist der maximierende Spieler und O ist der minimierende Spieler.
     </div>
-    <svg width="800" height="400" viewBox="0 0 800 400">
-        <!-- Tree structure -->
-        <line x1="400" y1="50" x2="200" y2="150" stroke="black" />
-        <line x1="400" y1="50" x2="600" y2="150" stroke="black" />
-        <line x1="200" y1="150" x2="100" y2="250" stroke="black" />
-        <line x1="200" y1="150" x2="300" y2="250" stroke="black" />
-        <line x1="600" y1="150" x2="500" y2="250" stroke="black" />
-        <line x1="600" y1="150" x2="700" y2="250" stroke="black" />
-        <line x1="100" y1="250" x2="50" y2="350" stroke="black" />
-        <line x1="100" y1="250" x2="150" y2="350" stroke="black" />
+    <svg width="1000" height="400" viewBox="0 0 1000 400">
+        <text x="10" y="50" class="turn-text" text-anchor="start">X an der Reihe</text>
+        <text x="10" y="150" class="turn-text" text-anchor="start">O an der Reihe</text>
+        <text x="10" y="250" class="turn-text" text-anchor="start">X an der Reihe</text>
+        <text x="10" y="350" class="turn-text" text-anchor="start">O an der Reihe</text>
+
+        <line x1="600" y1="50" x2="400" y2="150" stroke="black" />
+        <line x1="600" y1="50" x2="800" y2="150" stroke="black" />
+        <line x1="400" y1="150" x2="300" y2="250" stroke="black" />
+        <line x1="400" y1="150" x2="500" y2="250" stroke="black" />
+        <line x1="800" y1="150" x2="700" y2="250" stroke="black" />
+        <line x1="800" y1="150" x2="900" y2="250" stroke="black" />
         <line x1="300" y1="250" x2="250" y2="350" stroke="black" />
         <line x1="300" y1="250" x2="350" y2="350" stroke="black" />
         <line x1="500" y1="250" x2="450" y2="350" stroke="black" />
         <line x1="500" y1="250" x2="550" y2="350" stroke="black" />
         <line x1="700" y1="250" x2="650" y2="350" stroke="black" />
         <line x1="700" y1="250" x2="750" y2="350" stroke="black" />
+        <line x1="900" y1="250" x2="850" y2="350" stroke="black" />
+        <line x1="900" y1="250" x2="950" y2="350" stroke="black" />
 
-        <!-- Nodes -->
-        <g class="node" id="node-400-50">
-            <circle cx="400" cy="50" r="20" fill="white" stroke="black" stroke-width="2"/>
-            <text x="400" y="50" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        <g class="node" id="node-600-50">
+            <circle cx="600" cy="50" r="20" fill="white" stroke="black" stroke-width="2"/>
+            <text x="600" y="50" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
         </g>
-        <g class="node" id="node-200-150">
-            <circle cx="200" cy="150" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="200" y="150" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        <g class="node" id="node-400-150">
+            <circle cx="400" cy="150" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="400" y="150" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
         </g>
-        <g class="node" id="node-600-150">
-            <circle cx="600" cy="150" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="600" y="150" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-        <g class="node" id="node-100-250">
-            <circle cx="100" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
-            <text x="100" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        <g class="node" id="node-800-150">
+            <circle cx="800" cy="150" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="800" y="150" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
         </g>
         <g class="node" id="node-300-250">
             <circle cx="300" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
@@ -122,13 +126,9 @@
             <circle cx="700" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
             <text x="700" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
         </g>
-        <g class="node" id="node-50-350">
-            <circle cx="50" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="50" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-        <g class="node" id="node-150-350">
-            <circle cx="150" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="150" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        <g class="node" id="node-900-250">
+            <circle cx="900" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
+            <text x="900" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
         </g>
         <g class="node" id="node-250-350">
             <circle cx="250" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
@@ -154,27 +154,35 @@
             <circle cx="750" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
             <text x="750" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
         </g>
+        <g class="node" id="node-850-350">
+            <circle cx="850" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="850" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
+        <g class="node" id="node-950-350">
+            <circle cx="950" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+            <text x="950" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        </g>
     </svg>
 </div>
 <button id="actionBtn">Nächster Schritt</button>
 
 <script>
     const nodes = [
-        {id: 'node-50-350', value: null},
-        {id: 'node-150-350', value: null},
-        {id: 'node-100-250', value: null},
         {id: 'node-250-350', value: null},
         {id: 'node-350-350', value: null},
         {id: 'node-300-250', value: null},
-        {id: 'node-200-150', value: null},
         {id: 'node-450-350', value: null},
         {id: 'node-550-350', value: null},
         {id: 'node-500-250', value: null},
+        {id: 'node-400-150', value: null},
         {id: 'node-650-350', value: null},
         {id: 'node-750-350', value: null},
         {id: 'node-700-250', value: null},
-        {id: 'node-600-150', value: null},
-        {id: 'node-400-50', value: null}
+        {id: 'node-850-350', value: null},
+        {id: 'node-950-350', value: null},
+        {id: 'node-900-250', value: null},
+        {id: 'node-800-150', value: null},
+        {id: 'node-600-50', value: null}
     ];
 
     let currentNodeIndex = 0;
