@@ -81,111 +81,114 @@
     <div class="description">
         X ist der maximierende Spieler und O ist der minimierende Spieler.
     </div>
-    <svg width="1000" height="400" viewBox="0 0 1000 400">
-        <text x="10" y="50" class="turn-text" text-anchor="start">X an der Reihe</text>
-        <text x="10" y="150" class="turn-text" text-anchor="start">O an der Reihe</text>
-        <text x="10" y="250" class="turn-text" text-anchor="start">X an der Reihe</text>
-        <text x="10" y="350" class="turn-text" text-anchor="start">O an der Reihe</text>
-
-        <line x1="600" y1="50" x2="400" y2="150" stroke="black" />
-        <line x1="600" y1="50" x2="800" y2="150" stroke="black" />
-        <line x1="400" y1="150" x2="300" y2="250" stroke="black" />
-        <line x1="400" y1="150" x2="500" y2="250" stroke="black" />
-        <line x1="800" y1="150" x2="700" y2="250" stroke="black" />
-        <line x1="800" y1="150" x2="900" y2="250" stroke="black" />
-        <line x1="300" y1="250" x2="250" y2="350" stroke="black" />
-        <line x1="300" y1="250" x2="350" y2="350" stroke="black" />
-        <line x1="500" y1="250" x2="450" y2="350" stroke="black" />
-        <line x1="500" y1="250" x2="550" y2="350" stroke="black" />
-        <line x1="700" y1="250" x2="650" y2="350" stroke="black" />
-        <line x1="700" y1="250" x2="750" y2="350" stroke="black" />
-        <line x1="900" y1="250" x2="850" y2="350" stroke="black" />
-        <line x1="900" y1="250" x2="950" y2="350" stroke="black" />
-
-        <g class="node" id="node-600-50">
-            <circle cx="600" cy="50" r="20" fill="white" stroke="black" stroke-width="2"/>
-            <text x="600" y="50" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
-        </g>
-        <g class="node" id="node-400-150">
-            <circle cx="400" cy="150" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="400" y="150" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-        <g class="node" id="node-800-150">
-            <circle cx="800" cy="150" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="800" y="150" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-        <g class="node" id="node-300-250">
-            <circle cx="300" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
-            <text x="300" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
-        </g>
-        <g class="node" id="node-500-250">
-            <circle cx="500" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
-            <text x="500" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
-        </g>
-        <g class="node" id="node-700-250">
-            <circle cx="700" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
-            <text x="700" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
-        </g>
-        <g class="node" id="node-900-250">
-            <circle cx="900" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
-            <text x="900" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
-        </g>
-        <g class="node" id="node-250-350">
-            <circle cx="250" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="250" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-        <g class="node" id="node-350-350">
-            <circle cx="350" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="350" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-        <g class="node" id="node-450-350">
-            <circle cx="450" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="450" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-        <g class="node" id="node-550-350">
-            <circle cx="550" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="550" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-        <g class="node" id="node-650-350">
-            <circle cx="650" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="650" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-        <g class="node" id="node-750-350">
-            <circle cx="750" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="750" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-        <g class="node" id="node-850-350">
-            <circle cx="850" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="850" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-        <g class="node" id="node-950-350">
-            <circle cx="950" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
-            <text x="950" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
-        </g>
-    </svg>
+    <div id="svgContainer"></div>
 </div>
 <button id="actionBtn">Nächster Schritt</button>
 
 <script>
     const nodes = [
-        {id: 'node-250-350', value: null},
-        {id: 'node-350-350', value: null},
-        {id: 'node-300-250', value: null},
-        {id: 'node-450-350', value: null},
-        {id: 'node-550-350', value: null},
-        {id: 'node-500-250', value: null},
-        {id: 'node-400-150', value: null},
-        {id: 'node-650-350', value: null},
-        {id: 'node-750-350', value: null},
-        {id: 'node-700-250', value: null},
-        {id: 'node-850-350', value: null},
-        {id: 'node-950-350', value: null},
-        {id: 'node-900-250', value: null},
-        {id: 'node-800-150', value: null},
-        {id: 'node-600-50', value: null}
+        {id: 'node-250-350', value: null, x: 250, y: 350, player: 'O'},
+        {id: 'node-350-350', value: null, x: 350, y: 350, player: 'O'},
+        {id: 'node-300-250', value: null, x: 300, y: 250, player: 'X'},
+        {id: 'node-450-350', value: null, x: 450, y: 350, player: 'O'},
+        {id: 'node-550-350', value: null, x: 550, y: 350, player: 'O'},
+        {id: 'node-500-250', value: null, x: 500, y: 250, player: 'X'},
+        {id: 'node-400-150', value: null, x: 400, y: 150, player: 'O'},
+        {id: 'node-650-350', value: null, x: 650, y: 350, player: 'O'},
+        {id: 'node-750-350', value: null, x: 750, y: 350, player: 'O'},
+        {id: 'node-700-250', value: null, x: 700, y: 250, player: 'X'},
+        {id: 'node-850-350', value: null, x: 850, y: 350, player: 'O'},
+        {id: 'node-950-350', value: null, x: 950, y: 350, player: 'O'},
+        {id: 'node-900-250', value: null, x: 900, y: 250, player: 'X'},
+        {id: 'node-800-150', value: null, x: 800, y: 150, player: 'O'},
+        {id: 'node-600-50', value: null, x: 600, y: 50, player: 'X'}
     ];
 
     let currentNodeIndex = 0;
+
+    function createSVG() {
+        const svgNS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(svgNS, "svg");
+        svg.setAttribute("width", "1000");
+        svg.setAttribute("height", "400");
+        svg.setAttribute("viewBox", "0 0 1000 400");
+
+// Create turn text
+        const turns = [
+            {y: 50, text: "X an der Reihe"},
+            {y: 150, text: "O an der Reihe"},
+            {y: 250, text: "X an der Reihe"},
+            {y: 350, text: "O an der Reihe"}
+        ];
+
+        turns.forEach(turn => {
+            const text = document.createElementNS(svgNS, "text");
+            text.setAttribute("x", "10");
+            text.setAttribute("y", turn.y.toString());
+            text.setAttribute("class", "turn-text");
+            text.setAttribute("text-anchor", "start");
+            text.textContent = turn.text;
+            svg.appendChild(text);
+        });
+
+// Create lines
+        const lines = [
+            {x1: 600, y1: 50, x2: 400, y2: 150},
+            {x1: 600, y1: 50, x2: 800, y2: 150},
+            {x1: 400, y1: 150, x2: 300, y2: 250},
+            {x1: 400, y1: 150, x2: 500, y2: 250},
+            {x1: 800, y1: 150, x2: 700, y2: 250},
+            {x1: 800, y1: 150, x2: 900, y2: 250},
+            {x1: 300, y1: 250, x2: 250, y2: 350},
+            {x1: 300, y1: 250, x2: 350, y2: 350},
+            {x1: 500, y1: 250, x2: 450, y2: 350},
+            {x1: 500, y1: 250, x2: 550, y2: 350},
+            {x1: 700, y1: 250, x2: 650, y2: 350},
+            {x1: 700, y1: 250, x2: 750, y2: 350},
+            {x1: 900, y1: 250, x2: 850, y2: 350},
+            {x1: 900, y1: 250, x2: 950, y2: 350}
+        ];
+
+        lines.forEach(line => {
+            const lineElement = document.createElementNS(svgNS, "line");
+            lineElement.setAttribute("x1", line.x1.toString());
+            lineElement.setAttribute("y1", line.y1.toString());
+            lineElement.setAttribute("x2", line.x2.toString());
+            lineElement.setAttribute("y2", line.y2.toString());
+            lineElement.setAttribute("stroke", "black");
+            svg.appendChild(lineElement);
+        });
+
+// Create nodes
+        nodes.forEach(node => {
+            const g = document.createElementNS(svgNS, "g");
+            g.setAttribute("class", "node");
+            g.setAttribute("id", node.id);
+
+            const circle = document.createElementNS(svgNS, "circle");
+            circle.setAttribute("cx", node.x.toString());
+            circle.setAttribute("cy", node.y.toString());
+            circle.setAttribute("r", "20");
+            circle.setAttribute("fill", node.player === 'X' ? "white" : "black");
+            circle.setAttribute("stroke", "black");
+            circle.setAttribute("stroke-width", "2");
+
+            const text = document.createElementNS(svgNS, "text");
+            text.setAttribute("x", node.x.toString());
+            text.setAttribute("y", node.y.toString());
+            text.setAttribute("font-size", "20");
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("dominant-baseline", "central");
+            text.setAttribute("fill", node.player === 'X' ? "black" : "white");
+            text.textContent = node.player;
+
+            g.appendChild(circle);
+            g.appendChild(text);
+            svg.appendChild(g);
+        });
+
+        document.getElementById("svgContainer").appendChild(svg);
+    }
 
     function getRandomValue() {
         return Math.floor(Math.random() * 3) - 1; // Returns -1, 0, or 1
@@ -262,8 +265,9 @@
 
     function resetTree() {
         nodes.forEach(node => {
-            updateNodeValue(node, node.id.includes('350') ? 'O' : (node.id.includes('250') || node.id.includes('50') ? 'X' : 'O'));
+            updateNodeValue(node, node.player);
             removeHighlight(node.id);
+            node.value = null;
         });
         currentNodeIndex = 0;
         const actionBtn = document.getElementById('actionBtn');
@@ -279,7 +283,9 @@
         }
     }
 
-    document.getElementById('actionBtn').addEventListener('click', handleButtonClick);
-</script>
+    document.addEventListener('DOMContentLoaded', function () {
+        createSVG();
+        document.getElementById('actionBtn').addEventListener('click', handleButtonClick);
+    });</script>
 </body>
 </html>
