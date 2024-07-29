@@ -83,21 +83,21 @@
 
 <script>
     const nodes = [
-        {id: 'node-250-350', value: null, x: 250, y: 350 },
-        {id: 'node-350-350', value: null, x: 350, y: 350 },
-        {id: 'node-300-250', value: null, x: 300, y: 250 },
-        {id: 'node-450-350', value: null, x: 450, y: 350 },
-        {id: 'node-550-350', value: null, x: 550, y: 350 },
-        {id: 'node-500-250', value: null, x: 500, y: 250 },
-        {id: 'node-400-150', value: null, x: 400, y: 150 },
-        {id: 'node-650-350', value: null, x: 650, y: 350 },
-        {id: 'node-750-350', value: null, x: 750, y: 350 },
-        {id: 'node-700-250', value: null, x: 700, y: 250 },
-        {id: 'node-850-350', value: null, x: 850, y: 350 },
-        {id: 'node-950-350', value: null, x: 950, y: 350 },
-        {id: 'node-900-250', value: null, x: 900, y: 250 },
-        {id: 'node-800-150', value: null, x: 800, y: 150 },
-        {id: 'node-600-50', value: null, x: 600, y: 50 }
+        {id: 'node-250-350', value: null, x: 250, y: 350, hardcodedValue: -1},
+        {id: 'node-350-350', value: null, x: 350, y: 350, hardcodedValue: 0},
+        {id: 'node-300-250', value: null, x: 300, y: 250, hardcodedValue: -1},
+        {id: 'node-450-350', value: null, x: 450, y: 350, hardcodedValue: 1},
+        {id: 'node-550-350', value: null, x: 550, y: 350, hardcodedValue: -1},
+        {id: 'node-500-250', value: null, x: 500, y: 250, hardcodedValue: -1},
+        {id: 'node-400-150', value: null, x: 400, y: 150, hardcodedValue: -1},
+        {id: 'node-650-350', value: null, x: 650, y: 350, hardcodedValue: 0},
+        {id: 'node-750-350', value: null, x: 750, y: 350, hardcodedValue: 1},
+        {id: 'node-700-250', value: null, x: 700, y: 250, hardcodedValue: 1},
+        {id: 'node-850-350', value: null, x: 850, y: 350, hardcodedValue: -1},
+        {id: 'node-950-350', value: null, x: 950, y: 350, hardcodedValue: 0},
+        {id: 'node-900-250', value: null, x: 900, y: 250, hardcodedValue: 0},
+        {id: 'node-800-150', value: null, x: 800, y: 150, hardcodedValue: 1},
+        {id: 'node-600-50', value: null, x: 600, y: 50, hardcodedValue: 1}
     ];
 
     let currentNodeIndex = 0;
@@ -181,54 +181,17 @@
         document.getElementById("svgContainer").appendChild(svg);
     }
 
-    function getRandomValue() {
-        return Math.floor(Math.random() * 3) - 1; // Returns -1, 0, or 1
-    }
-
     function updateNodeValue(node, value) {
         const nodeElement = document.getElementById(node.id);
         const textElement = nodeElement.querySelector('text');
         textElement.textContent = value;
     }
 
-    function minimax(depth, isMaximizing) {
-        if (depth === 3) {
-            return getRandomValue();
-        }
-
-        if (isMaximizing) {
-            let bestValue = -Infinity;
-            for (let i = 0; i < 2; i++) {
-                let value = minimax(depth + 1, false);
-                bestValue = Math.max(bestValue, value);
-            }
-            return bestValue;
-        } else {
-            let bestValue = Infinity;
-            for (let i = 0; i < 2; i++) {
-                let value = minimax(depth + 1, true);
-                bestValue = Math.min(bestValue, value);
-            }
-            return bestValue;
-        }
-    }
-
     function nextStep() {
         if (currentNodeIndex < nodes.length) {
             const currentNode = nodes[currentNodeIndex];
-
-            if (currentNode.id.includes('350')) {
-                // Leaf nodes
-                currentNode.value = getRandomValue();
-            } else {
-                // Internal nodes
-                const isMaximizing = currentNode.id.includes('250') || currentNode.id.includes('50');
-                const depth = currentNode.id.includes('250') ? 2 : (currentNode.id.includes('150') ? 1 : 0);
-                currentNode.value = minimax(depth, isMaximizing);
-            }
-
+            currentNode.value = currentNode.hardcodedValue;
             updateNodeValue(currentNode, currentNode.value);
-
             currentNodeIndex++;
 
             if (currentNodeIndex === nodes.length) {
@@ -241,8 +204,7 @@
 
     function resetTree() {
         nodes.forEach(node => {
-            updateNodeValue(node, node.player);
-            removeHighlight(node.id);
+            updateNodeValue(node, '');
             node.value = null;
         });
         currentNodeIndex = 0;
@@ -262,6 +224,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         createSVG();
         document.getElementById('actionBtn').addEventListener('click', handleButtonClick);
-    });</script>
+    });
+</script>
 </body>
 </html>
