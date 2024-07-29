@@ -65,10 +65,6 @@
         .node text {
             font-weight: bold;
         }
-        .highlighted {
-            stroke: #e74c3c !important;
-            stroke-width: 4px !important;
-        }
         .turn-text {
             font-size: 16px;
             font-weight: bold;
@@ -87,21 +83,21 @@
 
 <script>
     const nodes = [
-        {id: 'node-250-350', value: null, x: 250, y: 350, player: 'O'},
-        {id: 'node-350-350', value: null, x: 350, y: 350, player: 'O'},
-        {id: 'node-300-250', value: null, x: 300, y: 250, player: 'X'},
-        {id: 'node-450-350', value: null, x: 450, y: 350, player: 'O'},
-        {id: 'node-550-350', value: null, x: 550, y: 350, player: 'O'},
-        {id: 'node-500-250', value: null, x: 500, y: 250, player: 'X'},
-        {id: 'node-400-150', value: null, x: 400, y: 150, player: 'O'},
-        {id: 'node-650-350', value: null, x: 650, y: 350, player: 'O'},
-        {id: 'node-750-350', value: null, x: 750, y: 350, player: 'O'},
-        {id: 'node-700-250', value: null, x: 700, y: 250, player: 'X'},
-        {id: 'node-850-350', value: null, x: 850, y: 350, player: 'O'},
-        {id: 'node-950-350', value: null, x: 950, y: 350, player: 'O'},
-        {id: 'node-900-250', value: null, x: 900, y: 250, player: 'X'},
-        {id: 'node-800-150', value: null, x: 800, y: 150, player: 'O'},
-        {id: 'node-600-50', value: null, x: 600, y: 50, player: 'X'}
+        {id: 'node-250-350', value: null, x: 250, y: 350 },
+        {id: 'node-350-350', value: null, x: 350, y: 350 },
+        {id: 'node-300-250', value: null, x: 300, y: 250 },
+        {id: 'node-450-350', value: null, x: 450, y: 350 },
+        {id: 'node-550-350', value: null, x: 550, y: 350 },
+        {id: 'node-500-250', value: null, x: 500, y: 250 },
+        {id: 'node-400-150', value: null, x: 400, y: 150 },
+        {id: 'node-650-350', value: null, x: 650, y: 350 },
+        {id: 'node-750-350', value: null, x: 750, y: 350 },
+        {id: 'node-700-250', value: null, x: 700, y: 250 },
+        {id: 'node-850-350', value: null, x: 850, y: 350 },
+        {id: 'node-950-350', value: null, x: 950, y: 350 },
+        {id: 'node-900-250', value: null, x: 900, y: 250 },
+        {id: 'node-800-150', value: null, x: 800, y: 150 },
+        {id: 'node-600-50', value: null, x: 600, y: 50 }
     ];
 
     let currentNodeIndex = 0;
@@ -113,7 +109,6 @@
         svg.setAttribute("height", "400");
         svg.setAttribute("viewBox", "0 0 1000 400");
 
-// Create turn text
         const turns = [
             {y: 50, text: "X an der Reihe"},
             {y: 150, text: "O an der Reihe"},
@@ -131,7 +126,6 @@
             svg.appendChild(text);
         });
 
-// Create lines
         const lines = [
             {x1: 600, y1: 50, x2: 400, y2: 150},
             {x1: 600, y1: 50, x2: 800, y2: 150},
@@ -159,7 +153,6 @@
             svg.appendChild(lineElement);
         });
 
-// Create nodes
         nodes.forEach(node => {
             const g = document.createElementNS(svgNS, "g");
             g.setAttribute("class", "node");
@@ -169,7 +162,6 @@
             circle.setAttribute("cx", node.x.toString());
             circle.setAttribute("cy", node.y.toString());
             circle.setAttribute("r", "20");
-            circle.setAttribute("fill", node.player === 'X' ? "white" : "black");
             circle.setAttribute("stroke", "black");
             circle.setAttribute("stroke-width", "2");
 
@@ -179,8 +171,7 @@
             text.setAttribute("font-size", "20");
             text.setAttribute("text-anchor", "middle");
             text.setAttribute("dominant-baseline", "central");
-            text.setAttribute("fill", node.player === 'X' ? "black" : "white");
-            text.textContent = node.player;
+            text.setAttribute("fill","white");
 
             g.appendChild(circle);
             g.appendChild(text);
@@ -198,16 +189,6 @@
         const nodeElement = document.getElementById(node.id);
         const textElement = nodeElement.querySelector('text');
         textElement.textContent = value;
-    }
-
-    function highlightNode(nodeId) {
-        const nodeElement = document.getElementById(nodeId);
-        nodeElement.classList.add('highlighted');
-    }
-
-    function removeHighlight(nodeId) {
-        const nodeElement = document.getElementById(nodeId);
-        nodeElement.classList.remove('highlighted');
     }
 
     function minimax(depth, isMaximizing) {
@@ -235,7 +216,6 @@
     function nextStep() {
         if (currentNodeIndex < nodes.length) {
             const currentNode = nodes[currentNodeIndex];
-            highlightNode(currentNode.id);
 
             if (currentNode.id.includes('350')) {
                 // Leaf nodes
@@ -248,10 +228,6 @@
             }
 
             updateNodeValue(currentNode, currentNode.value);
-
-            if (currentNodeIndex > 0) {
-                removeHighlight(nodes[currentNodeIndex - 1].id);
-            }
 
             currentNodeIndex++;
 
