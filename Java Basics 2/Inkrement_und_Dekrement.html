@@ -91,13 +91,13 @@
 </head>
 <body>
     <div class="slide">
-        <h1>Presentation Template</h1>
+        <h1>Inkrement und Dekrement</h1>
         <p class="description">
-            Inkrement_und_Dekrement.
+            Bei Java bedeutet eine Variable ++ zu machen das die Variable immer und den wert +1 erhöht wird
         </p>
         <div id="codeDisplay"></div>
         <div class="explanation">
-            Hier kommt eine Erklärung zum Code.
+         Diese Funktion gibt es nur in Programmiersprache Sie existieren in der Mathematik nicht.
         </div>
         <div class="legend">
             <span class="legend-item keyword">Schlüsselwort</span>
@@ -114,40 +114,14 @@
     </div>
 
     <script>
-        const javaCode = `/* Dies ist ein Multiline-Kommentar
+        const javaCode = `
+        int x = 5;
+        x ++;
+        System.out.println(x) // X ist in diesem Fall 6
+        int y = 13;
+        y --;
+        System.out.println(y) // Y ist in diesem Fall 12
 
-   Er erklärt den Zweck des Programms */
-public class VisualisierungsBeispiel {
-    private static final int MAX_WERT = 100; // Eine Konstante
-
-    public static void main(String[] args) {
-        // Array-Deklaration und Initialisierung
-        String[] namen = {"Alice", "Bob", "Charlie"};
-        
-        // For-Schleife mit Array
-        for (int i = 0; i < namen.length; i++) {
-            System.out.println("Name " + (i + 1) + ": " + namen[i]);
-        }
-
-
-        // If-Else Struktur mit Vergleichsoperatoren
-        int zahl = 42;
-        if (zahl < MAX_WERT) {
-            System.out.println("Die Zahl ist kleiner als " + MAX_WERT);
-        } else {
-            System.out.println("Die Zahl ist größer oder gleich " + MAX_WERT);
-        }
-
-        // Methoden-Aufruf und String-Konkatenation
-        double ergebnis = berechneDurchschnitt(3.5, 7.2);
-        System.out.println("Der Durchschnitt ist: " + ergebnis);
-    }
-
-    // Methoden-Definition mit Parametern und Rückgabewert
-    private static double berechneDurchschnitt(double a, double b) {
-        return (a + b) / 2.0;
-    }
-}
         `;
 
         function parseJavaCode(code) {
