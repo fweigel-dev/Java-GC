@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Max Implementieren</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .slide {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 1000px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .description {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: #34495e;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="slide">
+    <h1>Mini Max Implementieren</h1>
+    <div class="description">
+        Hier ist eine visuelle Darstellung des Mini-Max-Algorithmus für Tic-Tac-Toe. Die weißen Kreise repräsentieren X-Züge, die schwarzen Kreise O-Züge.
+    </div>
+    <svg width="800" height="400" viewBox="0 0 800 400">
+        <!-- Tree structure -->
+        <line x1="400" y1="50" x2="200" y2="150" stroke="black" />
+        <line x1="400" y1="50" x2="600" y2="150" stroke="black" />
+        <line x1="200" y1="150" x2="100" y2="250" stroke="black" />
+        <line x1="200" y1="150" x2="300" y2="250" stroke="black" />
+        <line x1="600" y1="150" x2="500" y2="250" stroke="black" />
+        <line x1="600" y1="150" x2="700" y2="250" stroke="black" />
+        <line x1="100" y1="250" x2="50" y2="350" stroke="black" />
+        <line x1="100" y1="250" x2="150" y2="350" stroke="black" />
+        <line x1="300" y1="250" x2="250" y2="350" stroke="black" />
+        <line x1="300" y1="250" x2="350" y2="350" stroke="black" />
+        <line x1="500" y1="250" x2="450" y2="350" stroke="black" />
+        <line x1="500" y1="250" x2="550" y2="350" stroke="black" />
+        <line x1="700" y1="250" x2="650" y2="350" stroke="black" />
+        <line x1="700" y1="250" x2="750" y2="350" stroke="black" />
+
+        <!-- Nodes -->
+        <circle cx="400" cy="50" r="20" fill="white" stroke="black" stroke-width="2"/>
+        <circle cx="200" cy="150" r="20" fill="black" stroke="black" stroke-width="2"/>
+        <circle cx="600" cy="150" r="20" fill="black" stroke="black" stroke-width="2"/>
+        <circle cx="100" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
+        <circle cx="300" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
+        <circle cx="500" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
+        <circle cx="700" cy="250" r="20" fill="white" stroke="black" stroke-width="2"/>
+        <circle cx="50" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+        <circle cx="150" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+        <circle cx="250" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+        <circle cx="350" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+        <circle cx="450" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+        <circle cx="550" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+        <circle cx="650" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+        <circle cx="750" cy="350" r="20" fill="black" stroke="black" stroke-width="2"/>
+
+        <!-- X and O labels -->
+        <text x="400" y="50" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        <text x="200" y="150" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        <text x="600" y="150" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        <text x="100" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        <text x="300" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        <text x="500" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        <text x="700" y="250" font-size="20" text-anchor="middle" dominant-baseline="central" fill="black">X</text>
+        <text x="50" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        <text x="150" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        <text x="250" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        <text x="350" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        <text x="450" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        <text x="550" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        <text x="650" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+        <text x="750" y="350" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">O</text>
+    </svg>
+</div>
+</body>
+</html>
