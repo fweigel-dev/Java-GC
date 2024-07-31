@@ -83,14 +83,16 @@
                 <div class="process-title">"Mixer"</div>
                 <div class="process-description">
                     Hier wird die Funktion Mixer aufgerufen. Man sagt dem Mixer, dass ein Glas voll mit Zutaten gemixt werden soll.
-                    Aber diese Zutat unterschiedet sich jeden morgen.
+                    Aber diese Zutat unterscheidet sich jeden morgen.
                     <div class="example">
-                        mixer("Erdberren")
+                        String smoothie = mixer("Erdbeeren");
+                        System.out.println(smoothie);
+
                         <br>
                         <br>
-                        public String mixer(String zutat){
+                        public static String mixer(String zutat){
                         <br>
-                        return "Ein leckeres Getränk aus " + zutat;
+                        return "Ein leckeres Getränk aus" + zutat;
                         <br>
 
                         }

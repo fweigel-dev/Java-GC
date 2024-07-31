@@ -93,11 +93,11 @@
     <div class="slide">
         <h1>Die Do-While Schleife</h1>
         <p class="description">
-            In einer do While schleife wird der Code in dieser mindestens einmal ausgeführt danach wieder nur noch durch die zutreffend Bedingung.
+            In einer do While Schleife wird der Code in dieser mindestens einmal ausgeführt danach wieder nur noch durch die zutreffende Bedingung.
         </p>
         <div id="codeDisplay"></div>
         <div class="explanation">
-            Hier wird Z solange erhöht bis es 10 erreicht hat und wird mindestens mal ausgegeben.
+            Hier wird Z solange erhöht bis es 10 erreicht hat und wird mindestens einmal ausgegeben.
         </div>
         <div class="legend">
             <span class="legend-item keyword">Schlüsselwort</span>
@@ -114,10 +114,11 @@
     </div>
 
     <script>
-        const javaCode = `do {
-    z++;
+        const javaCode = `int i = 0;
+do {
+    i ++;
     System.out.println("Z ist gleich: " + z)
-} while(z<10) ;
+} while(i < 10) ;
         `;
 
         function parseJavaCode(code) {

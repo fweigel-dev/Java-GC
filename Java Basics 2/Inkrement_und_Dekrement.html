@@ -91,13 +91,13 @@
 </head>
 <body>
     <div class="slide">
-        <h1>Die For Schleife</h1>
+        <h1>Inkrement und Dekrement</h1>
         <p class="description">
-           Die For-Schleife ist eine Schleifenstruktur, die es ermöglicht, eine Anweisung oder einen Block von Anweisungen mehrmals auszuführen.
+            Bei Java bedeutet eine Variable ++ zu machen das die Variable immer und den wert +1 erhöht wird
         </p>
         <div id="codeDisplay"></div>
         <div class="explanation">
-            x wird am Ende der Schleife 5 sein.
+         Diese Funktion gibt es nur in Programmiersprache Sie existieren in der Mathematik nicht.
         </div>
         <div class="legend">
             <span class="legend-item keyword">Schlüsselwort</span>
@@ -115,10 +115,13 @@
 
     <script>
         const javaCode = `
-        int y = 0;
-        for (int i = 0; i <= 5; i ++) {
-            y = y + 1;
-        }
+        int x = 5;
+        x ++;
+        System.out.println(x) // X ist in diesem Fall 6
+        int y = 13;
+        y --;
+        System.out.println(y) // Y ist in diesem Fall 12
+
         `;
 
         function parseJavaCode(code) {

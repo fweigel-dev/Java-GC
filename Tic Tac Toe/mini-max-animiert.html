@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Max Implementierung - Interaktiv</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .slide {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 1000px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .description {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: #34495e;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+        #actionBtn {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #actionBtn:hover {
+            background-color: #2980b9;
+        }
+        #actionBtn.reset {
+            background-color: #e74c3c;
+        }
+        #actionBtn.reset:hover {
+            background-color: #c0392b;
+        }
+        .node text {
+            font-weight: bold;
+        }
+        .turn-text {
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="slide">
+    <h1>Mini Max Implementierung</h1>
+    <div class="description">
+        X ist der maximierende Spieler und O ist der minimierende Spieler.
+    </div>
+    <div id="svgContainer"></div>
+</div>
+<button id="actionBtn">Nächster Schritt</button>
+
+<script>
+    const nodes = [
+        {id: 'node-250-350', value: null, x: 250, y: 350, hardcodedValue: -1},
+        {id: 'node-350-350', value: null, x: 350, y: 350, hardcodedValue: 1},
+        {id: 'node-300-250', value: null, x: 300, y: 250, hardcodedValue: 1},
+        {id: 'node-450-350', value: null, x: 450, y: 350, hardcodedValue: 1},
+        {id: 'node-550-350', value: null, x: 550, y: 350, hardcodedValue: 1},
+        {id: 'node-500-250', value: null, x: 500, y: 250, hardcodedValue: 1},
+        {id: 'node-400-150', value: null, x: 400, y: 150, hardcodedValue: 1},
+        {id: 'node-650-350', value: null, x: 650, y: 350, hardcodedValue: -1},
+        {id: 'node-750-350', value: null, x: 750, y: 350, hardcodedValue: -1},
+        {id: 'node-700-250', value: null, x: 700, y: 250, hardcodedValue: -1},
+        {id: 'node-850-350', value: null, x: 850, y: 350, hardcodedValue: 0},
+        {id: 'node-950-350', value: null, x: 950, y: 350, hardcodedValue: 1},
+        {id: 'node-900-250', value: null, x: 900, y: 250, hardcodedValue: 1},
+        {id: 'node-800-150', value: null, x: 800, y: 150, hardcodedValue: -1},
+        {id: 'node-600-50', value: null, x: 600, y: 50, hardcodedValue: 1}
+    ];
+
+    let currentNodeIndex = 0;
+
+    function createSVG() {
+        const svgNS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(svgNS, "svg");
+        svg.setAttribute("width", "1000");
+        svg.setAttribute("height", "400");
+        svg.setAttribute("viewBox", "0 0 1000 400");
+
+        const turns = [
+            {y: 50, text: "X an der Reihe"},
+            {y: 150, text: "O an der Reihe"},
+            {y: 250, text: "X an der Reihe"},
+            {y: 350, text: "O an der Reihe"}
+        ];
+
+        turns.forEach(turn => {
+            const text = document.createElementNS(svgNS, "text");
+            text.setAttribute("x", "10");
+            text.setAttribute("y", turn.y.toString());
+            text.setAttribute("class", "turn-text");
+            text.setAttribute("text-anchor", "start");
+            text.textContent = turn.text;
+            svg.appendChild(text);
+        });
+
+        const lines = [
+            {x1: 600, y1: 50, x2: 400, y2: 150},
+            {x1: 600, y1: 50, x2: 800, y2: 150},
+            {x1: 400, y1: 150, x2: 300, y2: 250},
+            {x1: 400, y1: 150, x2: 500, y2: 250},
+            {x1: 800, y1: 150, x2: 700, y2: 250},
+            {x1: 800, y1: 150, x2: 900, y2: 250},
+            {x1: 300, y1: 250, x2: 250, y2: 350},
+            {x1: 300, y1: 250, x2: 350, y2: 350},
+            {x1: 500, y1: 250, x2: 450, y2: 350},
+            {x1: 500, y1: 250, x2: 550, y2: 350},
+            {x1: 700, y1: 250, x2: 650, y2: 350},
+            {x1: 700, y1: 250, x2: 750, y2: 350},
+            {x1: 900, y1: 250, x2: 850, y2: 350},
+            {x1: 900, y1: 250, x2: 950, y2: 350}
+        ];
+
+        lines.forEach(line => {
+            const lineElement = document.createElementNS(svgNS, "line");
+            lineElement.setAttribute("x1", line.x1.toString());
+            lineElement.setAttribute("y1", line.y1.toString());
+            lineElement.setAttribute("x2", line.x2.toString());
+            lineElement.setAttribute("y2", line.y2.toString());
+            lineElement.setAttribute("stroke", "black");
+            svg.appendChild(lineElement);
+        });
+
+        nodes.forEach(node => {
+            const g = document.createElementNS(svgNS, "g");
+            g.setAttribute("class", "node");
+            g.setAttribute("id", node.id);
+
+            const circle = document.createElementNS(svgNS, "circle");
+            circle.setAttribute("cx", node.x.toString());
+            circle.setAttribute("cy", node.y.toString());
+            circle.setAttribute("r", "20");
+            circle.setAttribute("stroke", "black");
+            circle.setAttribute("stroke-width", "2");
+
+            const text = document.createElementNS(svgNS, "text");
+            text.setAttribute("x", node.x.toString());
+            text.setAttribute("y", node.y.toString());
+            text.setAttribute("font-size", "20");
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("dominant-baseline", "central");
+            text.setAttribute("fill","white");
+
+            g.appendChild(circle);
+            g.appendChild(text);
+            svg.appendChild(g);
+        });
+
+        document.getElementById("svgContainer").appendChild(svg);
+    }
+
+    function updateNodeValue(node, value) {
+        const nodeElement = document.getElementById(node.id);
+        const textElement = nodeElement.querySelector('text');
+        textElement.textContent = value;
+    }
+
+    function nextStep() {
+        if (currentNodeIndex < nodes.length) {
+            const currentNode = nodes[currentNodeIndex];
+            currentNode.value = currentNode.hardcodedValue;
+            updateNodeValue(currentNode, currentNode.value);
+            currentNodeIndex++;
+
+            if (currentNodeIndex === nodes.length) {
+                const actionBtn = document.getElementById('actionBtn');
+                actionBtn.textContent = 'Reset';
+                actionBtn.classList.add('reset');
+            }
+        }
+    }
+
+    function resetTree() {
+        nodes.forEach(node => {
+            updateNodeValue(node, '');
+            node.value = null;
+        });
+        currentNodeIndex = 0;
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.textContent = 'Nächster Schritt';
+        actionBtn.classList.remove('reset');
+    }
+
+    function handleButtonClick() {
+        if (currentNodeIndex < nodes.length) {
+            nextStep();
+        } else {
+            resetTree();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        createSVG();
+        document.getElementById('actionBtn').addEventListener('click', handleButtonClick);
+    });
+</script>
+</body>
+</html>
