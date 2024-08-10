@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .presentation-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .presentation-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .presentation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .tag {
+            background-color: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .tag.active {
+            background-color: #e74c3c;
+        }
+        #tagFilter {
+            margin-bottom: 30px;
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .open-button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .open-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <h1>Presentation List</h1>
+    <div id="tagFilter"></div>
+    <div id="presentationList" class="presentation-list"></div>
+
+    <script>
+        const presentationsConfig = [
+            {
+                title: "Java Garbage Collection",
+                description: "Animated and interactive presentation about the java garbage collector",
+                tags: [
+                    { name: "German", emoji: "🇩🇪" },
+                    { name: "Java", emoji: "☕"},
+                    { name: "Garbage Collection", emoji: "🗑️"}
+                ],
+                contentUrl: "https://fweigel-dev.github.io/Java-Presentations/Java-Garbage-Collection/presentation.html"
+            },
+            {
+                title: "Java Programming Basics",
+                description: "Presentation about the Basics in Java (Variables, operations and control structures)",
+                tags: [
+                    { name: "German", emoji: "🇩🇪" },
+                    { name: "Programming", emoji: "💻" },
+                    { name: "Java", emoji: "☕"}
+                ],
+                contentUrl: "https://fweigel-dev.github.io/Java-Presentations/Java-Grundlagen/presentation.html"
+            },
+        ];
+
+        let activeFilters = new Set();
+
+        function renderPresentations() {
+            const container = document.getElementById('presentationList');
+            container.innerHTML = '';
+            presentationsConfig.forEach(presentation => {
+                if (activeFilters.size === 0 || presentation.tags.some(tag => activeFilters.has(tag.name))) {
+                    const card = document.createElement('div');
+                    card.className = 'presentation-card';
+                    card.innerHTML = `
+                        <h2>${presentation.title}</h2>
+                        <p>${presentation.description}</p>
+                        <div class="tags">
+                            ${presentation.tags.map(tag => `<span class="tag">${tag.emoji} ${tag.name}</span>`).join('')}
+                        </div>
+                        <button class="open-button" onclick="openPresentation('${presentation.contentUrl}')">Open Presentation</button>
+                    `;
+                    container.appendChild(card);
+                }
+            });
+        }
+
+        function openPresentation(url) {
+            window.open(url, '_blank');
+        }
+
+        function renderTagFilter() {
+            const filterContainer = document.getElementById('tagFilter');
+            const allTags = new Set(presentationsConfig.flatMap(p => p.tags.map(t => t.name)));
+            allTags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag';
+                const emoji = presentationsConfig.find(p => p.tags.some(t => t.name === tag)).tags.find(t => t.name === tag).emoji;
+                tagElement.textContent = `${emoji} ${tag}`;
+                tagElement.onclick = () => toggleFilter(tag, tagElement);
+                filterContainer.appendChild(tagElement);
+            });
+        }
+
+        function toggleFilter(tag, element) {
+            if (activeFilters.has(tag)) {
+                activeFilters.delete(tag);
+                element.classList.remove('active');
+            } else {
+                activeFilters.add(tag);
+                element.classList.add('active');
+            }
+            renderPresentations();
+        }
+
+        renderTagFilter();
+        renderPresentations();
+    </script>
+</body>
+</html>
