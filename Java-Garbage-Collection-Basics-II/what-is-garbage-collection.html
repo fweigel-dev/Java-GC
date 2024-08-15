@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Was ist Garbage Collection?</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .content {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .diagram {
+            width: 400px;
+            height: 400px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .sphere {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, #f5f7fa, #c3cfe2);
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-size: 18px;
+            transition: all 1s ease;
+        }
+
+        #mark {
+            background-color: #3498DB;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #sweep {
+            background-color: #E74C3C;
+            bottom: 20%;
+            left: 10%;
+        }
+
+        #compact {
+            background-color: #2ECC71;
+            bottom: 20%;
+            right: 10%;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            text-align: left;
+            margin-top: 2rem;
+        }
+
+        li {
+            position: relative;
+            padding-left: 1.5em;
+            margin-bottom: 0.5em;
+            line-height: 1.4;
+        }
+
+        li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <h1 id="title">Wiederholung: Was ist Garbage Collection?</h1>
+
+    <p id="description">Garbage Collection (GC) ist eine automatische Speicherverwaltungsfunktion in Java, die Objekte
+        identifiziert und löscht, die vom Programm nicht mehr benötigt werden.</p>
+
+    <div class="diagram">
+        <div class="sphere">
+            <div id="mark" class="process">Mark/Markieren</div>
+            <div id="sweep" class="process">Sweep/Bereinigen</div>
+            <div id="compact" class="process">Compact/Komprimieren</div>
+        </div>
+    </div>
+    <ul id="keyPoints">
+        <li>Gibt automatisch den Speicher frei, der von nicht mehr benötigten Objekten belegt wird</li>
+        <li>Folgt einem "Mark, Sweep, Compact"-Prozess</li>
+        <li>Läuft im Hintergrund, getrennt vom Hauptprogramm</li>
+        <li>Hilft, Speicherlecks und OutOfMemory-Fehler zu verhindern</li>
+        <li>Kann die Anwendungsleistung während der Sammelzyklen beeinflussen (-> Stop the World)</li>
+    </ul>
+</div>
+
+<script>
+</script>
+</body>
+</html>
