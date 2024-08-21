@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ubuntu CLI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Ubuntu Mono', monospace;
+
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            background-color: white;
+            overflow: hidden;
+
+        }
+
+        #terminal {
+            position: relative;
+            border-radius: 6px;
+            color: #FFFFFF;
+            box-shadow: 0 0 20px #000000;
+            margin: 5% auto;
+            width: 80%;
+            max-width: 810px;
+
+        }
+
+        header {
+            background-color: #222222;
+            padding: 12px;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            border-color: #111111;
+            border-width: 20px;
+        }
+
+        #terminal-window {
+            background-color: #300a24;
+            padding: 10px;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            min-height: 200px;
+            overflow-y: auto;
+            height: 61vh;
+
+        }
+
+        #terminal-input {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        #command-input {
+            border: none;
+            background: none;
+            color: white;
+            outline: none;
+            padding: 10px;
+            flex-grow: 1;
+            font-size: inherit;
+        }
+
+        .button-group {
+            grid-column: 3;
+            justify-self: end;
+        }
+
+        .window-button {
+            width: 20px;
+            height: 20px;
+            background-color: #373737;
+            border: none;
+            border-radius: 50%;
+            margin-left: 14px;
+            cursor: pointer;
+            color: #FFFFFF;
+        }
+
+        .window-button:hover {
+            background-color: #424242;
+        }
+
+        #terminal-output {
+            white-space: pre-wrap;
+        }
+
+        .command-line {
+            display: flex;
+            align-items: center;
+        }
+
+        .prompt {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body style="background-image: url('jammy-jellyfish-wallpaper.jpg');   background-repeat: no-repeat;   background-size: 100% 100%;">
+<div id="terminal">
+    <header>
+        <div class="header-text">Using Serial GC: (-XX:+UseSerialGC)</div>
+        <div class="button-group">
+                <button id="minimize-button" class="window-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 16 16">
+                    <rect width="8" height="1" x="4 " y="10" rx="1"/>
+                </svg>
+            </button>
+                <button id="maximize-button" class="window-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 16 16">
+                    <rect width="6" height="6" x="5" y="5" rx="1" fill="none" stroke="#ffffff"/>
+                </svg>
+            </button>
+                <button id="close-button" class="window-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+    <div id="terminal-window">
+        <div id="terminal-output">
+            <div id="dynamic-content">
+                <div class="command-line">
+                    <span class="prompt">user@local:~$</span>
+                    <input type="text" id="command-input" value="java -XX:+UseSerialGC -verbose:gc GCDemo.java"
+                           autofocus>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const gcLog = `[0.003s][info][gc] Using Serial
+[0,593s][info][gc] GC(0) Pause Young (Allocation Failure) 132M->112M(477M) 59,523ms
+[0,692s][info][gc] GC(1) Pause Young (Allocation Failure) 244M->242M(477M) 80,940ms
+[0,780s][info][gc] GC(2) Pause Young (Allocation Failure) 374M->373M(505M) 69,955ms
+[0,791s][info][gc] GC(3) Pause Full (Allocation Failure) 373M->373M(863M) 11,141ms
+[0,962s][info][gc] GC(4) Pause Young (Allocation Failure) 595M->591M(863M) 116,732ms
+[1,124s][info][gc] GC(5) Pause Young (Allocation Failure) 829M->827M(1065M) 131,042ms
+[1,139s][info][gc] GC(6) Pause Full (Allocation Failure) 827M->827M(1927M) 14,483ms
+Memory allocated
+[1,533s][info][gc] GC(7) Pause Young (Allocation Failure) 1329M->1327M(1927M) 266,406ms
+[1,914s][info][gc] GC(8) Pause Young (Allocation Failure) 1858M->1856M(2388M) 313,044ms
+[2,092s][info][gc] GC(9) Pause Full (Allocation Failure) 1856M->879M(2126M) 178,250ms
+Memory allocated
+[2,307s][info][gc] GC(10) Pause Young (Allocation Failure) 1466M->1463M(2126M) 129,876ms
+Memory allocated
+[2,422s][info][gc] GC(11) Pause Young (Allocation Failure) 2049M->1552M(2139M) 36,864ms
+[2,451s][info][gc] GC(12) Pause Full (Allocation Failure) 1552M->92M(2126M) 28,912ms
+[2,635s][info][gc] GC(13) Pause Young (Allocation Failure) 679M->677M(2126M) 98,943ms
+Memory allocated
+[2,841s][info][gc] GC(14) Pause Young (Allocation Failure) 1264M->1260M(2126M) 114,557ms
+[3,141s][info][gc] GC(15) Pause Young (Allocation Failure) 1847M->1842M(2429M) 225,955ms
+[3,334s][info][gc] GC(16) Pause Full (Allocation Failure) 1842M->865M(2126M) 192,991ms
+Memory allocated`;
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const elements = {
+            commandInput: document.getElementById('command-input'),
+            terminalWindow: document.getElementById('terminal-window'),
+                terminalOutput: document.getElementById('terminal-output'),
+        };
+
+        function parseTime(timeString) {
+            return parseFloat(timeString.replace(',', '.').replace('s', ''));
+        }
+
+        function animateLog() {
+            const lines = gcLog.split('\n');
+            let lastTime = 0;
+            let cumulativeDelay = 0;
+
+                lines.forEach((line) => {
+                const timeMatch = line.match(/^\[([\d,]+)s]/);
+                    const delay = timeMatch ? (parseTime(timeMatch[1]) - lastTime) * 1000 : 50;
+
+                cumulativeDelay += delay;
+                    lastTime = timeMatch ? parseTime(timeMatch[1]) : lastTime;
+
+                setTimeout(() => {
+                        elements.terminalOutput.textContent += line + '\n';
+                    elements.terminalWindow.scrollTop = elements.terminalWindow.scrollHeight;
+                }, cumulativeDelay);
+            });
+        }
+
+            elements.commandInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                    elements.terminalOutput.textContent = `\n\n\n\nuser@local:~$  ${elements.commandInput.value}\n`;
+                    elements.commandInput.value = '';
+                animateLog();
+            }
+        });
+
+            elements.commandInput.selectionStart = elements.commandInput.selectionEnd = elements.commandInput.value.length;
+    });
+</script>
+</body>
+</html>
