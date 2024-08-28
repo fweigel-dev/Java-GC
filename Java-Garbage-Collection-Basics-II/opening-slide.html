@@ -12,23 +12,22 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-color: #2b2b2b;
+            color: #a9b7c6;
         }
 
         h1 {
-            color: #2c3e50;
+            color: #4da6ff;
         }
 
         h2 {
-            color: #333;
+            color: #ff8c00;
         }
 
         .content {
             text-align: center;
-            background-color: white;
             padding: 2rem;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             width: 40vw;
         }
@@ -72,7 +71,7 @@
             font-weight: bold;
             text-align: center;
             font-size: 14px;
-            color: #333;
+            color: #fff;
         }
 
         .mascot {
@@ -130,62 +129,62 @@
 </head>
 <body>
 <div class="content">
-<div class="container">
-    <h1>Java Memory Management</h1>
-    <h2>Garbage Collection Basics II</h2>
-    <div class="mascot"></div>
-    <div class="curved-layout">
-        <div class="gc-bin">
-            <div class="bin">
-                <img src="assets/recycle.svg" alt="Serial GC"
-                     style="filter: invert(13%) sepia(94%) saturate(7466%) hue-rotate(0deg) brightness(94%) contrast(117%);">
+    <div class="container">
+        <h1>Garbage Collection Basics II</h1>
+        <h2>Generational Garbage Collection</h2>
+        <div class="mascot"></div>
+        <div class="curved-layout">
+            <div class="gc-bin">
+                <div class="bin">
+                    <img src="assets/recycle.svg" alt="Serial GC"
+                         style="filter: invert(13%) sepia(94%) saturate(7466%) hue-rotate(0deg) brightness(94%) contrast(117%);">
+                </div>
+                <span class="bin-label">Serial GC</span>
             </div>
-            <span class="bin-label">Serial GC</span>
-        </div>
-        <div class="gc-bin">
-            <div class="bin">
-                <img src="assets/recycle.svg" alt="Parallel GC"
-                     style="filter: invert(55%) sepia(96%) saturate(1739%) hue-rotate(86deg) brightness(128%) contrast(119%);">
+            <div class="gc-bin">
+                <div class="bin">
+                    <img src="assets/recycle.svg" alt="Parallel GC"
+                         style="filter: invert(55%) sepia(96%) saturate(1739%) hue-rotate(86deg) brightness(128%) contrast(119%);">
+                </div>
+                <span class="bin-label">Parallel GC</span>
             </div>
-            <span class="bin-label">Parallel GC</span>
-        </div>
-        <div class="gc-bin">
-            <div class="bin">
-                <img src="assets/recycle.svg" alt="G1 GC"
-                     style="filter: invert(55%) sepia(95%) saturate(1731%) hue-rotate(360deg) brightness(101%) contrast(105%);">
+            <div class="gc-bin">
+                <div class="bin">
+                    <img src="assets/recycle.svg" alt="G1 GC"
+                         style="filter: invert(55%) sepia(95%) saturate(1731%) hue-rotate(360deg) brightness(101%) contrast(105%);">
+                </div>
+                <span class="bin-label">G1 GC</span>
             </div>
-            <span class="bin-label">G1 GC</span>
-        </div>
-        <div class="gc-bin">
-            <div class="bin">
-                <img src="assets/recycle.svg" alt="CMS GC"
-                     style="filter: invert(8%) sepia(98%) saturate(7493%) hue-rotate(248deg) brightness(89%) contrast(143%);">
+            <div class="gc-bin">
+                <div class="bin">
+                    <img src="assets/recycle.svg" alt="CMS GC"
+                         style="filter: invert(8%) sepia(98%) saturate(7493%) hue-rotate(248deg) brightness(89%) contrast(143%);">
+                </div>
+                <span class="bin-label">CMS GC</span>
             </div>
-            <span class="bin-label">CMS GC</span>
-        </div>
-        <div class="gc-bin">
-            <div class="bin">
-                <img src="assets/recycle.svg" alt="ZGC"
-                     style="filter: invert(14%) sepia(92%) saturate(7085%) hue-rotate(300deg) brightness(91%) contrast(117%);">
+            <div class="gc-bin">
+                <div class="bin">
+                    <img src="assets/recycle.svg" alt="ZGC"
+                         style="filter: invert(14%) sepia(92%) saturate(7085%) hue-rotate(300deg) brightness(91%) contrast(117%);">
+                </div>
+                <span class="bin-label">ZGC GC</span>
             </div>
-            <span class="bin-label">ZGC GC</span>
-        </div>
-        <div class="gc-bin">
-            <div class="bin">
-                <img src="assets/recycle.svg" alt="Epsilon GC"
-                     style="filter: invert(93%) sepia(18%) saturate(7154%) hue-rotate(359deg) brightness(103%) contrast(94%);">
+            <div class="gc-bin">
+                <div class="bin">
+                    <img src="assets/recycle.svg" alt="Epsilon GC"
+                         style="filter: invert(93%) sepia(18%) saturate(7154%) hue-rotate(359deg) brightness(103%) contrast(94%);">
+                </div>
+                <span class="bin-label">Epsilon GC</span>
             </div>
-            <span class="bin-label">Epsilon GC</span>
-        </div>
-        <div class="gc-bin">
-            <div class="bin">
-                <img src="assets/recycle.svg" alt="Shenandoah GC"
-                     style="filter: invert(17%) sepia(91%) saturate(5371%) hue-rotate(276deg) brightness(89%) contrast(118%);">
+            <div class="gc-bin">
+                <div class="bin">
+                    <img src="assets/recycle.svg" alt="Shenandoah GC"
+                         style="filter: invert(17%) sepia(91%) saturate(5371%) hue-rotate(276deg) brightness(89%) contrast(118%);">
+                </div>
+                <span class="bin-label">Shenandoah GC</span>
             </div>
-            <span class="bin-label">Shenandoah GC</span>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>
