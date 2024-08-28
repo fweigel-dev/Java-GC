@@ -1,34 +1,64 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What is the Problem?</title>
+    <meta name="description" content="Das Konzept von Referenz">
+    <title>Konzept einer Referenz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          media="print" onload="this.media='all'"/>
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        body, html {
             margin: 0;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #2b2b2b;
+            color: #a9b7c6;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 40px);
+            margin-top: 40px;
+            max-height: calc(100vh - 47px);
+        }
+
+        .main-content {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+            font-size: 1rem;
+            flex-direction: column;
+            padding: 1rem;
         }
 
         .content {
             text-align: center;
-            background-color: white;
             padding: 2rem;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             max-width: 900px;
             width: 95%;
+            margin: 0 auto;
+        }
+
+
+        header {
+            text-align: center;
         }
 
         h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            color: #4da6ff;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #ff8c00;
+            margin-top: 0;
         }
 
         .memory-container {
@@ -40,7 +70,7 @@
 
         .memory-area {
             width: 45%;
-            border: 2px solid #333;
+            border: 2px solid #555;
             position: relative;
             overflow: hidden;
             display: flex;
@@ -48,16 +78,16 @@
         }
 
         .stack {
-            background-color: #AED6F1;
+            background-color: #2c3e50;
         }
 
         .heap {
-            background-color: #FADBD8;
+            background-color: #34495e;
         }
 
         .stack-block {
-            background-color: white;
-            border: 1px solid #333;
+            background-color: #3498db;
+            border: 1px solid #2980b9;
             margin: 5px;
             padding: 5px;
             display: flex;
@@ -65,6 +95,7 @@
             align-items: center;
             transition: all 0.3s ease;
             cursor: pointer;
+            color: #ecf0f1;
         }
 
         .heap-object {
@@ -78,6 +109,7 @@
             font-weight: bold;
             transition: all 0.3s ease;
             cursor: pointer;
+            color: #ecf0f1;
         }
 
         .controls {
@@ -102,13 +134,13 @@
 
         .reference-arrow {
             position: absolute;
-            background-color: #333;
+            background-color: #ecf0f1;
             height: 2px;
             transform-origin: 0 50%;
         }
 
         .delete-btn {
-            background-color: #e74c3c;
+            background-color: #ff8c00;
             color: white;
             border: none;
             border-radius: 3px;
@@ -119,62 +151,39 @@
         }
 
         .delete-btn:hover {
-            background-color: #c0392b;
-        }
-
-
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-            text-align: left;
-
-        }
-
-        li {
-            position: relative;
-            padding-left: 1.5em;
-            margin-bottom: 0.5em;
-            line-height: 1.4;
-        }
-
-        li::before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: #3498db;
-            font-weight: bold;
-            font-size: 1.2em;
+            background-color: #c56d02;
         }
     </style>
 </head>
 <body>
-<div class="content">
-    <h1>Wiederholung: Welches Problem haben wir?</h1>
-
-    <ul>
-        <li>Währen laufzeit wird Speicher allokiert</li>
-        <li>Wie bekommen wir den Speicher wieder frei?</li>
-    </ul>
-    <div class="memory-container">
-        <div class="memory-area stack">
-            <h2>Stack</h2>
+<div class="main-container">
+    <header>
+        <h1>Wiederholung Garbage Collection</h1>
+        <h2>Konzept von Referenzen</h2>
+    </header>
+    <main class="main-content">
+        <div class="content">
+            <div class="memory-container">
+                <div class="memory-area stack">
+                    <h2>Stack Memory</h2>
+                </div>
+                <div class="memory-area heap">
+                    <h2>Heap Space</h2>
+                </div>
+            </div>
+            <div class="controls">
+                <button onclick="addStackBlock()">Stack-Block hinzufügen</button>
+                <button onclick="createHeapObject()">Heap-Objekt erstellen</button>
+                <button onclick="collectGarbage()">Garbage Collection</button>
+                <button onclick="resetAll()">Alles zurücksetzen</button>
+            </div>
         </div>
-        <div class="memory-area heap">
-            <h2>Heap</h2>
-        </div>
-    </div>
-    <div class="controls">
-        <button onclick="addStackBlock()">Stack-Block hinzufügen</button>
-        <button onclick="createHeapObject()">Heap-Objekt erstellen</button>
-        <button onclick="collectGarbage()">Garbage Collection</button>
-        <button onclick="resetAll()">Alles zurücksetzen</button>
-    </div>
+    </main>
 </div>
 <script>
     const stackArea = document.querySelector('.stack');
     const heapArea = document.querySelector('.heap');
     let blockCount = 0;
-    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
     let selectedObject = null;
 
     function addStackBlock() {
@@ -244,7 +253,7 @@
 
         const object = document.createElement('div');
         object.className = 'heap-object';
-        object.style.backgroundColor = colors[currentObjects.length];
+        object.style.backgroundColor = '#6A9955';
         object.textContent = `Obj ${currentObjects.length + 1}`;
 
         const position = getValidPosition();
