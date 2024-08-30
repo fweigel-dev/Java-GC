@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Garbage Collection Basics">
+    <title>Garbage Collection Basics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          media="print" onload="this.media='all'"/>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #2b2b2b;
+            color: #a9b7c6;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 40px);
+            margin-top: 40px;
+            max-height: calc(100vh - 47px);
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+
+        .content {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4da6ff;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #ff8c00;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .memory-container {
+            width: 100%;
+            max-width: 800px;
+            height: 100px;
+            background-color: #3c3f41;
+            border: 2px solid #555;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .object {
+            height: 80px;
+            margin: 0 5px;
+            border: 1px solid #777;
+            transition: all 0.5s ease;
+        }
+
+        .live {
+            background-color: #4da6ff;
+        }
+
+        .unreferenced {
+            background-color: #ff8c00;
+        }
+
+        .removed {
+            background-color: transparent;
+            border-color: #ff8c00;
+            border-style: dashed;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border: 1px solid #777;
+        }
+
+        #nextStepBtn {
+            background-color: #4da6ff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        #nextStepBtn:hover {
+            background-color: #3a8ad6;
+        }
+
+        .phases {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .phase {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .phase-pointer {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff8c00;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .phase-pointer.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <header>
+        <h1>Der Garbage Collection Prozess</h1>
+        <h2>Vereinfacht Dargestellt</h2>
+    </header>
+    <main class="main-content">
+        <div class="content">
+            <div class="phases">
+                <div class="phase">
+                    <span class="phase-pointer">➤</span>
+                    <span>Objekte erstellen</span>
+                </div>
+                <div class="phase">
+                    <span class="phase-pointer">➤</span>
+                    <span>Objekte markieren</span>
+                </div>
+                <div class="phase">
+                    <span class="phase-pointer">➤</span>
+                    <span>Unreferenzierte Objekte entfernen</span>
+                </div>
+                <div class="phase">
+                    <span class="phase-pointer">➤</span>
+                    <span>Speicher komprimieren</span>
+                </div>
+            </div>
+            <div id="memory-container" class="memory-container"></div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color live"></div>
+                    <span>Referenzierte Objekte</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color unreferenced"></div>
+                    <span>Unreferenzierte Objekte</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: transparent; border: 1px dashed #ff8c00;"></div>
+                    <span>Entfernte Objekte</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #3c3f41;"></div>
+                    <span>Freier Heap Speicher</span>
+                </div>
+            </div>
+            <button id="nextStepBtn">Nächster Schritt</button>
+        </div>
+    </main>
+</div>
+
+<script>
+    const memoryContainer = document.getElementById('memory-container');
+    const nextStepBtn = document.getElementById('nextStepBtn');
+    const phasePointers = document.querySelectorAll('.phase-pointer');
+
+    let objects = [];
+    let currentStep = -1;
+    const containerWidth = 800;
+
+    function generateObjects() {
+        let remainingWidth = containerWidth - objects.reduce((sum, obj) => sum + obj.width, 0);
+        let currentPosition = objects.length > 0 ? objects[objects.length - 1].position + objects[objects.length - 1].width : 0;
+
+        while (remainingWidth > 40) {
+            const minWidth = 40;
+            const maxWidth = Math.min(150, remainingWidth - 40);
+            const width = Math.floor(Math.random() * (maxWidth - minWidth + 1)) + minWidth;
+
+            objects.push({id: objects.length + 1, width: width, position: currentPosition});
+            remainingWidth -= width;
+            currentPosition += width;
+        }
+
+        if (remainingWidth > 0) {
+            objects.push({id: objects.length + 1, width: remainingWidth, position: currentPosition});
+        }
+    }
+
+    function createObjects() {
+        const existingObjects = new Set(Array.from(memoryContainer.children).map(el => el.id.split('-')[1]));
+
+        objects.forEach(obj => {
+            if (!existingObjects.has(obj.id.toString())) {
+                const element = document.createElement('div');
+                element.id = `object-${obj.id}`;
+                element.className = 'object live';
+                element.style.width = '0px';
+                element.style.left = `${obj.position}px`;
+                memoryContainer.appendChild(element);
+
+
+                element.style.width = `${obj.width}px`;
+            }
+        });
+    }
+
+    function markObjects() {
+        objects.forEach(obj => {
+            const element = document.getElementById(`object-${obj.id}`);
+            if (Math.random() < 0.5) {
+                element.classList.remove('live');
+                element.classList.add('unreferenced');
+                obj.unreferenced = true;
+            } else {
+                element.classList.remove('unreferenced');
+                element.classList.add('live');
+                obj.unreferenced = false;
+            }
+        });
+    }
+
+    function removeUnreferencedObjects() {
+        objects.forEach(obj => {
+            if (obj.unreferenced) {
+                const element = document.getElementById(`object-${obj.id}`);
+                element.classList.remove('unreferenced');
+                element.classList.add('removed');
+            }
+        });
+    }
+
+    function compactObjects() {
+        let currentPosition = 0;
+        objects = objects.filter(obj => !obj.unreferenced);
+
+        objects.forEach(obj => {
+            const element = document.getElementById(`object-${obj.id}`);
+            element.style.left = `${currentPosition}px`;
+            obj.position = currentPosition;
+            currentPosition += obj.width;
+        });
+
+        const removedElements = document.querySelectorAll('.removed');
+        removedElements.forEach(el => el.remove());
+    }
+
+    function updatePhasePointer() {
+        phasePointers.forEach((pointer, index) => {
+            pointer.classList.toggle('active', index === currentStep);
+        });
+    }
+
+    function nextStep() {
+        currentStep = (currentStep + 1) % 4;
+        updatePhasePointer();
+
+        switch (currentStep) {
+            case 0:
+                generateObjects();
+                createObjects();
+                break;
+            case 1:
+                markObjects();
+                break;
+            case 2:
+                removeUnreferencedObjects();
+                break;
+            case 3:
+                compactObjects();
+                break;
+        }
+    }
+
+    nextStepBtn.addEventListener('click', nextStep);
+
+    updatePhasePointer();
+</script>
+</body>
+</html>
