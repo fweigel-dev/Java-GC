@@ -24,7 +24,7 @@
             flex-direction: column;
             height: calc(100% - 40px);
             margin-top: 40px;
-            max-height: calc(100vh - 45px);
+            max-height: calc(100vh - 47px);
         }
 
         .top-bar {
@@ -40,9 +40,60 @@
             padding: 5px 15px;
             margin-left: 40px;
             margin-right: 5px;
-            border-radius: 8px 8px 0 0;
+            border-radius: 8px 0 0 0;
             height: 20px;
             line-height: 20px;
+        }
+
+        .file-close-button {
+            margin-left: 5px;
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        .file-close-button:hover {
+            background-color: #424242;
+        }
+
+        .file-close-button .tooltiptext {
+            visibility: hidden;
+            width: 60px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            top: 125%;
+            left: 50%;
+            margin-left: -30px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+        }
+
+        .file-close-button .tooltiptext::after {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent #555 transparent;
+        }
+
+        .file-close-button:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
         }
 
         .main-content {
@@ -161,7 +212,7 @@
 <body>
 <div class="ide-container">
     <header class="top-bar">
-        <div class="tab">Main.java</div>
+        <div id="file-tab" class="tab"></div>
     </header>
     <main class="main-content">
         <nav class="sidebar">
@@ -179,7 +230,7 @@
                 <i class="fas fa-code-branch sidebar-icon" aria-label="Branch"></i>
             </div>
         </nav>
-        <div class="code-area">
+        <text class="code-area">
             <pre><code class="language-java">public class Main {
     int num = 42;
     boolean bool = true;
@@ -193,7 +244,7 @@
         printMessage();
     }
 }</code></pre>
-        </div>
+        </text>
     </main>
     <footer id="status-bar" class="status-bar">
         <div id="file-path" class="file-path"></div>
@@ -227,14 +278,17 @@
             return iconMap[extension] || ['fa-regular fa-file', 'icon-generic'];
         }
 
-        function updateFooter(path) {
+        function updateFileInfo(path) {
             const parts = path.split('/');
+            const fileName = parts[parts.length - 1];
             const filePath = document.getElementById('file-path');
             const lineColInfo = document.getElementById('line-col-info');
+            const fileTab = document.getElementById('file-tab');
 
+            const [iconClass, colorClass] = getFileIconInfo(fileName);
+            fileTab.innerHTML = `<i class="${iconClass} file-icon ${colorClass}"></i>${fileName}<span class="file-close-button"><i class="fa-solid fa-xmark"></i><span class="tooltiptext">Close</span></span>`;
             filePath.innerHTML = parts.map((part, index) => {
                 if (index === parts.length - 1) {
-                    const [iconClass, colorClass] = getFileIconInfo(part);
                     return `<i class="${iconClass} file-icon ${colorClass}"></i>${part}`;
                 }
                 return `${part} <i class="fa-solid fa-angle-right"></i>`;
@@ -243,7 +297,7 @@
             lineColInfo.textContent = 'Line: 1 Column: 1';
         }
 
-        updateFooter('Java-Presentations/__templates__/ide-template.html');
+        updateFileInfo('Java-Presentations/__templates__/ide-template.html');
     });
 </script>
 </body>
