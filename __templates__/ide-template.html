@@ -110,9 +110,12 @@
         }
 
         .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background-color: #3c3f41;
-            padding: 2px 20px;
-            font-size: 14px;
+            padding: 2px 10px;
+            font-size: 12px;
         }
 
         .file-icon {
@@ -192,12 +195,15 @@
 }</code></pre>
         </div>
     </main>
-    <footer id="status-bar" class="status-bar"></footer>
+    <footer id="status-bar" class="status-bar">
+        <div id="file-path" class="file-path"></div>
+        <div id="line-col-info" class="line-col-info"></div>
+    </footer>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
+    document.addEventListener('DOMContentLoaded', () => {
         const codeElement = document.querySelector('code');
 
         Prism.highlightAll();
@@ -223,14 +229,18 @@
 
         function updateFooter(path) {
             const parts = path.split('/');
-            const statusBar = document.getElementById('status-bar');
-            statusBar.innerHTML = parts.map((part, index) => {
+            const filePath = document.getElementById('file-path');
+            const lineColInfo = document.getElementById('line-col-info');
+
+            filePath.innerHTML = parts.map((part, index) => {
                 if (index === parts.length - 1) {
                     const [iconClass, colorClass] = getFileIconInfo(part);
-                    return `<i class="${iconClass} file-icon ${colorClass}"></i>${part} Line: 1 Column: 1`;
+                    return `<i class="${iconClass} file-icon ${colorClass}"></i>${part}`;
                 }
                 return `${part} <i class="fa-solid fa-angle-right"></i>`;
             }).join(' ');
+
+            lineColInfo.textContent = 'Line: 1 Column: 1';
         }
 
         updateFooter('Java-Presentations/__templates__/ide-template.html');
