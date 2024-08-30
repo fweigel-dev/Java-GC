@@ -83,30 +83,12 @@
 
         .code-area {
             flex-grow: 1;
-            display: flex;
             overflow: auto;
-        }
-
-        .line-numbers {
-            background-color: #313335;
-            color: #606366;
-            user-select: none;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            padding: 15px 5px 10px;
-            text-align: right;
-        }
-
-        .line-numbers span {
-            display: block;
-            line-height: 1.5;
-            padding: 0 5px;
         }
 
         pre[class*="language-"] {
             margin: 0;
             padding: 15px 10px 10px;
-            flex-grow: 1;
         }
 
         code[class*="language-"] {
@@ -115,8 +97,15 @@
             line-height: 1.5;
         }
 
-        code[class*="language-"] .token {
-            padding: 0;
+        .line-number {
+            display: inline-block;
+            width: 2em;
+            text-align: right;
+            padding-right: 1em;
+            margin-right: 1em;
+            user-select: none;
+            color: #6A9955;
+            border-right: 1px solid #4A4A4A;
         }
 
         .status-bar {
@@ -141,9 +130,13 @@
             }
 
             pre[class*="language-"],
-            code[class*="language-"],
-            .line-numbers {
+            code[class*="language-"] {
                 font-size: 12px;
+            }
+
+            .line-number {
+                font-size: 12px;
+                width: 1.5em;
             }
         }
     </style>
@@ -193,15 +186,15 @@
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
         const codeElement = document.querySelector('code');
-        const lineCount = (codeElement.textContent.match(/\n/g) || []).length + 1;
-        const lineNumbersElement = document.getElementById('lineNumbers');
-        const padStartLength = lineCount.toString().length;
 
-        for (let i = 1; i <= lineCount; i++) {
-            const lineNumber = document.createElement('span');
-            lineNumber.textContent = i.toString().padStart(padStartLength, '0');
-            lineNumbersElement.appendChild(lineNumber);
-        }
+        Prism.highlightAll();
+
+        const lines = codeElement.innerHTML.split('\n');
+
+        codeElement.innerHTML = lines.map((line, index) =>
+            `<span class="line-number">${index + 1}</span>${line}`
+        ).join('\n');
+
     });
 </script>
 </body>
