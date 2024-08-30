@@ -111,9 +111,22 @@
 
         .status-bar {
             background-color: #3c3f41;
-            padding: 2px 16px;
-            font-size: 10px;
+            padding: 2px 20px;
+            font-size: 14px;
         }
+
+        .file-icon {
+            margin-right: 5px;
+            margin-left: 3px;
+        }
+
+        .icon-java { color: #5283a2; }
+        .icon-js { color: #f7df1e; }
+        .icon-html { color: #e34c26; }
+        .icon-css { color: #264de4; }
+        .icon-vue { color: #41b883; }
+        .icon-md { color: #ffffff; }
+        .icon-generic { color: #a9b7c6; }
 
         @media (max-width: 600px) {
             .sidebar {
@@ -195,12 +208,26 @@
             `<span class="line-number">${index + 1}</span>${line}`
         ).join('\n');
 
+        function getFileIconInfo(filename) {
+            const extension = filename.split('.').pop().toLowerCase();
+            const iconMap = {
+                'java': ['fa-brands fa-java', 'icon-java'],
+                'js': ['fa-brands fa-js', 'icon-js'],
+                'html': ['fa-brands fa-html5', 'icon-html'],
+                'css': ['fa-brands fa-css3-alt', 'icon-css'],
+                'vue': ['fa-brands fa-vuejs', 'icon-vue'],
+                'md': ['fa-brands fa-markdown', 'icon-md']
+            };
+            return iconMap[extension] || ['fa-regular fa-file', 'icon-generic'];
+        }
+
         function updateFooter(path) {
             const parts = path.split('/');
             const statusBar = document.getElementById('status-bar');
             statusBar.innerHTML = parts.map((part, index) => {
                 if (index === parts.length - 1) {
-                    return `${part} Line: 1 Column: 1`;
+                    const [iconClass, colorClass] = getFileIconInfo(part);
+                    return `<i class="${iconClass} file-icon ${colorClass}"></i>${part} Line: 1 Column: 1`;
                 }
                 return `${part} <i class="fa-solid fa-angle-right"></i>`;
             }).join(' ');
