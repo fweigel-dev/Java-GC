@@ -212,7 +212,7 @@
 
     let objects = [];
     let currentStep = -1;
-    const containerWidth = 800;
+    let nextObjectId = 1;
 
     function generateObjects() {
         let remainingWidth = containerWidth - objects.reduce((sum, obj) => sum + obj.width, 0);
@@ -223,13 +223,13 @@
             const maxWidth = Math.min(150, remainingWidth - 40);
             const width = Math.floor(Math.random() * (maxWidth - minWidth + 1)) + minWidth;
 
-            objects.push({id: objects.length + 1, width: width, position: currentPosition});
+        objects.push({id: nextObjectId++, width: width, position: currentPosition});
             remainingWidth -= width;
             currentPosition += width;
         }
 
         if (remainingWidth > 0) {
-            objects.push({id: objects.length + 1, width: remainingWidth, position: currentPosition});
+        objects.push({id: nextObjectId++, width: remainingWidth, position: currentPosition});
         }
     }
 
