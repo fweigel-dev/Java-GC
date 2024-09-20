@@ -66,9 +66,15 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         .pulse {
@@ -124,17 +130,24 @@
 
 <script>
     const slides = [
-        'opening-slide.html',
-        'what-is-the-problem.html',
-        'jvm-architecture.html',
-        'what-is-garbage-collection.html',
-        'object-reachability-and-garbage-collection.html',
-        'different-gcs.html',
+        'titel-folie.html',
+        'jvm-aufbau.html',
+        'was-ist-memory-overflow.html',
+        'basic-garbage-collection-process.html',
+        'konzept-von-referenzen.html',
+        'objekte-dereferenzieren.html',
+        'unreferenzierte-objekte-finden.html',
+        'warum-generationale-garbage-collection.html',
+        'minor-mayor-gc-introduction-ide.html',
+        'minor-mayor-gc-introduction-terminal.html',
+        'minor-mayor-gc-introduction-explanation.html',
+        'quellen.html'
+
     ];
     let currentSlide = 0;
 
-    document.addEventListener('keydown', function(event) {
-        switch(event.key) {
+    document.addEventListener('keydown', function (event) {
+        switch (event.key) {
             case 'ArrowLeft':
                 changeSlide(-1);
                 break;
