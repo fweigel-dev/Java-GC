@@ -40,8 +40,11 @@
             padding: 2rem;
             border-radius: 20px;
             max-width: 900px;
-            width: 95%;
+            width: 100%;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         header {
@@ -63,7 +66,7 @@
 
         .memory-container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             height: 100px;
             background-color: #3c3f41;
             border: 2px solid #555;
@@ -129,11 +132,15 @@
             background-color: #3a8ad6;
         }
 
+
         .phases {
+            width: 100%;
+            max-width: 900px;
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px;
         }
+
 
         .phase {
             position: relative;
@@ -158,8 +165,8 @@
 <body>
 <div class="main-container">
     <header>
-        <h1>Der Garbage Collection Prozess</h1>
-        <h2>Vereinfacht Dargestellt</h2>
+        <h1>Wiederholung Garbage Collection</h1>
+        <h2>Vereinfacht: Garbage Collection Prozess</h2>
     </header>
     <main class="main-content">
         <div class="content">
@@ -213,6 +220,7 @@
     let objects = [];
     let currentStep = -1;
     let nextObjectId = 1;
+    const containerWidth = 900;
 
     function generateObjects() {
         let remainingWidth = containerWidth - objects.reduce((sum, obj) => sum + obj.width, 0);
