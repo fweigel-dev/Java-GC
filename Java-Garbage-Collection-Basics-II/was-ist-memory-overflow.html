@@ -68,11 +68,8 @@
         }
 
         .error-message {
-            position: absolute;
-            width: 1200px;
-            top: 65%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 1200px;
             background-color: #ff4d4d;
             color: white;
             padding: 20px;
@@ -81,6 +78,10 @@
             font-weight: bold;
             display: none;
             z-index: 10;
+        }
+
+        .ram-container {
+            margin-bottom: 20px;
         }
 
     </style>
@@ -126,21 +127,21 @@
                 </svg>
             </div>
         </div>
+        <div class="error-message" id="errorMessage">
+            Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+        </div>
 
         <div class="explanation">
             <p><i class="fas fa-caret-right" style="color: #4da6ff;"></i> Java-Anwendungen reservieren Speicher für
                 Objekte im Heap.</p>
             <p><i class="fas fa-caret-right" style="color: #4da6ff;"></i> Mit der Erstellung weiterer Objekte steigt die
                 Speichernutzung im Laufe der Zeit.</p>
-            <p><i class="fas fa-caret-right" style="color: #4da6ff;"></i> Ohne angemessene Verwaltung wird der Speicher immer voller</p>
+            <p><i class="fas fa-caret-right" style="color: #4da6ff;"></i> Ohne angemessene Verwaltung wird der Speicher
+                immer voller</p>
             <p><i class="fas fa-caret-right" style="color: #4da6ff;"></i> Wenn der Speicher voll ist, tritt ein
                 OutOfMemoryError auf, der zum Absturz der Anwendung führt.</p>
         </div>
     </main>
-</div>
-
-<div class="error-message" id="errorMessage">
-    Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
 </div>
 
 
@@ -149,7 +150,6 @@
     const emptyAnimation = document.getElementById('emptyAnimation');
     const errorMessage = document.getElementById('errorMessage');
     let animationEnded = false;
-
 
 
     function showError() {
@@ -176,13 +176,13 @@
         fillAnimation.beginElement();
         emptyAnimation.beginElement();
 
-            animationEnded = false;
-        }
+        animationEnded = false;
+    }
 
     fillAnimation.addEventListener('endEvent', showError);
     fillAnimation.addEventListener('animationend', showError);
 
-    document.body.addEventListener('click', function() {
+    document.body.addEventListener('click', function () {
         if (animationEnded) {
             restartAnimation();
         }
