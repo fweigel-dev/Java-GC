@@ -180,6 +180,7 @@
         .icon-css { color: #264de4; }
         .icon-vue { color: #41b883; }
         .icon-md { color: #ffffff; }
+        .icon-sh { color: #a9b7c6; }
         .icon-generic { color: #a9b7c6; }
 
         @media (max-width: 600px) {
@@ -253,6 +254,7 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-bash.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const codeElement = document.querySelector('code');
@@ -273,7 +275,8 @@
                 'html': ['fa-brands fa-html5', 'icon-html'],
                 'css': ['fa-brands fa-css3-alt', 'icon-css'],
                 'vue': ['fa-brands fa-vuejs', 'icon-vue'],
-                'md': ['fa-brands fa-markdown', 'icon-md']
+                'md': ['fa-brands fa-markdown', 'icon-md'],
+                'sh': ['fa-solid fa-terminal', 'icon-sh'],
             };
             return iconMap[extension] || ['fa-regular fa-file', 'icon-generic'];
         }
