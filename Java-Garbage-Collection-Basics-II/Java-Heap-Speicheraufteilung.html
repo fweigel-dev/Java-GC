@@ -22,26 +22,8 @@
             display: flex;
             flex-direction: column;
             height: calc(100% - 40px);
-            margin-top: 40px;
-            max-height: calc(100vh - 47px);
-        }
-
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            overflow: hidden;
-            font-size: 1rem;
+            justify-content: center;
             align-items: center;
-        }
-
-        .content {
-            text-align: center;
-            padding: 2rem;
-            border-radius: 20px;
-            max-width: 1000px;
-            width: 95%;
-            margin: 0 auto;
         }
 
         header {
@@ -60,32 +42,30 @@
             margin-top: 0;
         }
 
-        .color-primary {
-            color: #4da6ff;
-        }
-
-        .color-secondary {
-            color: #ff8c00;
-        }
-
-        .color-accent-1 {
-            color: #9b59b6;
-        }
-
-        .color-accent-2 {
-            color: #2ecc71;
-        }
-
-        .color-accent-3 {
-            color: #6A9955;
-        }
-
         .heap-container {
             display: flex;
-            padding: 2rem;
-            max-width: 1000px;
+            flex-direction: row;
             width: 95%;
+            max-width: 1000px;
             height: 100px;
+            transition: all 0.5s ease-in-out;
+            margin-top: -10.5rem;
+        }
+
+        .heap-row {
+            display: flex;
+            flex: 1;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .heap-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            margin: 5px;
+            flex: 1;
+            transition: all 0.5s ease-in-out;
         }
 
         .label {
@@ -98,65 +78,115 @@
 
         .eden {
             background-color: #4da6ff;
-            flex: 1;
         }
 
         .survivor {
             background-color: #ff8c00;
-            flex: 1;
         }
 
         .tenured {
             background-color: #9b59b6;
-            flex: 3;
         }
 
         .permanent {
             background-color: #2ecc71;
-            flex: 3;
         }
 
-        .heap-container > div {
-            display: flex;
-            justify-content: center;
+        .generation-label {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            padding: 10px;
+            font-weight: bold;
+            display: none;
             align-items: center;
+            justify-content: center;
+            background-color: #333;
             border-radius: 10px;
-            margin: 5px;
+            margin-right: 10px;
+            color: #fff;
         }
 
-
+        .heap-section {
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+        }
     </style>
 </head>
 <body>
+<header>
+    <h1>Heap-Speicherstruktur der JVM</h1>
+    <h2>Genereller Aufbau</h2>
+</header>
 <div class="main-container">
-    <header>
-        <h1>Heap-Speicherstruktur der JVM</h1>
-        <h2>Genereller Aufbau</h2>
-    </header>
-    <main class="main-content">
-        <div class="content">
-            <div class="heap-container">
-                <div class="eden">
+
+    <div class="heap-container">
+        <div class="heap-row">
+            <div class="heap-section young-gen">
+                <div class="generation-label">Young Gen</div>
+                <div class="heap-item eden">
                     <div class="label">Eden</div>
                 </div>
-                <div class="survivor">
+                <div class="heap-item survivor">
                     <div class="label">S0</div>
                 </div>
-                <div class="survivor">
+                <div class="heap-item survivor">
                     <div class="label">S1</div>
                 </div>
-                <div class="tenured">
+            </div>
+            <div class="heap-section old-gen">
+                <div class="generation-label">Old Gen</div>
+                <div class="heap-item tenured">
                     <div class="label">Tenured</div>
                 </div>
-                <div class="permanent">
+            </div>
+            <div class="heap-section perm-gen">
+                <div class="generation-label">Perm Gen</div>
+                <div class="heap-item permanent">
                     <div class="label">Permanent</div>
                 </div>
             </div>
-
         </div>
-
-    </main>
+    </div>
 </div>
 
+<script>
+    let isExpanded = false;
+
+    document.body.addEventListener('click', () => {
+        const heapContainer = document.querySelector('.heap-container');
+        const heapRow = document.querySelector('.heap-row');
+        const sections = heapRow.querySelectorAll('.heap-section');
+        const labels = document.querySelectorAll('.generation-label');
+
+        if (isExpanded) {
+            heapContainer.style.flexDirection = 'row';
+            heapContainer.style.height = '100px';
+            heapRow.style.flexDirection = 'row';
+            heapRow.style.flexWrap = 'nowrap';
+            sections.forEach(section => {
+                section.style.flex = '1';
+                section.style.flexDirection = 'row';
+                section.style.margin = '0';
+            });
+            labels.forEach(label => label.style.display = 'none');
+        } else {
+            heapContainer.style.flexDirection = 'column';
+            heapContainer.style.height = '350px';
+            heapRow.style.flexDirection = 'column';
+            heapRow.style.flexWrap = 'nowrap';
+
+            sections.forEach((section, index) => {
+                section.style.flex = '1 0 30%';
+                section.style.flexDirection = 'row';
+                section.style.margin = index === 0 ? '0 0 10px 0' : '10px 0';
+            });
+
+            labels.forEach(label => label.style.display = 'flex');
+        }
+        isExpanded = !isExpanded;
+    });
+</script>
 </body>
 </html>
