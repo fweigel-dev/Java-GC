@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Wiederholung: Was ist eine Klasse">
+    <title>Was ist eine Klasse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          media="print" onload="this.media='all'"/>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #2b2b2b;
+            color: #a9b7c6;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: calc(100% - 40px);
+            max-height: calc(100vh - 47px);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 0 auto;
+        }
+
+
+        header {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4da6ff;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #ff8c00;
+            margin-top: 0;
+        }
+
+        .content i {
+            color: #4da6ff;
+        }
+
+        .concept {
+            background-color: #3c3c3c;
+            border-left: 5px solid #ff8c00;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .example {
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        code {
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: Consolas, monospace;
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <header>
+        <h1>Wiederholung:</h1>
+        <h2>Was ist eine Klasse?</h2>
+    </header>
+    <main>
+        <div class="main-content">
+            <div class="concept">
+                <h3>Klasse</h3>
+                <p>Bauplan/Vorlage für ein Objekt</p>
+                <ul>
+                    <li>Definiert Attribute (Eigenschaften)</li>
+                    <li>Definiert Methoden (Funktionen)</li>
+                    <li>Enthält Konstruktoren</li>
+                </ul>
+                <div class="example">
+                    <p><code>class Auto { ... }</code></p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
