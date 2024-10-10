@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Wiederholung: Was ist ein Object">
+    <meta name="description" content="Wiederholung: Was ist ein Objekt">
     <title>Was ist ein Objekt</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
           media="print" onload="this.media='all'"/>
@@ -21,24 +21,18 @@
         .main-container {
             display: flex;
             flex-direction: column;
+            align-items: center;
             height: calc(100% - 40px);
-            margin-top: 40px;
             max-height: calc(100vh - 47px);
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .main-content {
-            display: flex;
-            flex-grow: 1;
-            overflow: hidden;
-            font-size: 1rem;
-        }
-
-        .content {
-            text-align: center;
-            padding: 2rem;
-            border-radius: 20px;
-            max-width: 900px;
-            width: 95%;
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 5px;
             margin: 0 auto;
         }
 
@@ -63,6 +57,28 @@
             color: #4da6ff;
         }
 
+        .concept {
+            background-color: #3c3c3c;
+            border-left: 5px solid #ff8c00;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .example {
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        code {
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: Consolas, monospace;
+        }
     </style>
 </head>
 <body>
@@ -71,10 +87,19 @@
         <h1>Wiederholung:</h1>
         <h2>Was ist ein Objekt?</h2>
     </header>
-    <main class="main-content">
-        <div class="content">
-            <p><i class="fas fa-caret-right"></i> Klasse: Bauplan/ Vorlage für ein Objekt</p>
-            <p><i class="fas fa-caret-right"></i> Objekt: Instanz einer Klasse</p>
+    <main>
+        <div class="main-content">
+            <div class="concept">
+                <h3>Objekt</h3>
+                <p>Instanz einer Klasse</p>
+                <ul>
+                    <li>Konkrete Ausprägung des Klassenbauplans</li>
+                    <li>Individueller Datensatz mit spezifischen Attributwerten</li>
+                </ul>
+                <div class="example">
+                    <p>Beispiel: <code>Auto meinAuto = new Auto("VW", "Golf", 2020);</code></p>
+                </div>
+            </div>
         </div>
     </main>
 </div>
