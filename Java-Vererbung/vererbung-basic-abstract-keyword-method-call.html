@@ -236,16 +236,20 @@
             </div>
         </nav>
         <text class="code-area">
-            <pre><code class="language-java">public class AbstractBeispiel {
+            <pre><code class="language-java">public class FormBeispiel {
     public static void main(String[] args) {
-        Tier tier = new Tier(); // -> java: Tier is abstract; cannot be instantiated
-        tier.essen();
-    }
-}
+        Form kreis = new Kreis("rot", 5);
+        Form rechteck = new Rechteck("blau", 4, 6);
 
-/*
-    Abstrakte Klassen können nicht instanziiert werden und können nur als Basisklassen für andere Klassen verwendet werden!
- */</code></pre>
+        System.out.println("Fläche des Kreises: " + kreis.berechneFlaeche());
+        System.out.println("Farbe des Kreises: " + kreis.getFarbe());
+        kreis.beschreibeForm();
+
+        System.out.println("Fläche des Rechtecks: " + rechteck.berechneFlaeche());
+        System.out.println("Farbe des Rechtecks: " + rechteck.getFarbe());
+        rechteck.beschreibeForm();
+    }
+}</code></pre>
         </text>
     </main>
     <footer id="status-bar" class="status-bar">
@@ -301,7 +305,7 @@
             lineColInfo.textContent = 'Line: 1 Column: 1';
         }
 
-        updateFileInfo('Java-Presentations/Java-Vererbung/AbstractBeispiel.java');
+        updateFileInfo('Java-Presentations/Java-Vererbung/FormBeispiel.java');
     });
 </script>
 </body>

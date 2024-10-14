@@ -9,4 +9,6 @@ public class AbstractBeispiel {
 
 /*
     Abstrakte Klassen können nicht instanziiert werden und können nur als Basisklassen für andere Klassen verwendet werden!
+
+    Eine Klasse muss NICHT abstrakt sein, um vererbt zu werden, sie muss aber abstrakt sein, wenn sie eine abstrakte Methode enthält.
  */
