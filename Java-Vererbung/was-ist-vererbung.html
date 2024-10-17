@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Was ist Vererbung">
-    <title>Vererbung </title>
+    <meta name="description" content="Base Slide for Presentations">
+    <title>Base Slide</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
           media="print" onload="this.media='all'"/>
     <style>
@@ -21,21 +21,26 @@
         .main-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
             height: calc(100% - 40px);
+            margin-top: 40px;
             max-height: calc(100vh - 47px);
-            max-width: 800px;
-            margin: 0 auto;
         }
 
         .main-content {
-            width: 100%;
-            max-width: 800px;
-            padding: 20px;
-            border-radius: 5px;
-            margin: 0 auto;
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+            font-size: 1rem;
         }
 
+        .content {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 95%;
+            margin: 0 auto;
+        }
 
         header {
             text-align: center;
@@ -53,32 +58,21 @@
             margin-top: 0;
         }
 
+        li {
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+        }
+
         .content i {
             color: #4da6ff;
         }
 
-        .concept {
-            background-color: #3c3c3c;
-            border-left: 5px solid #ff8c00;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
+        .list i {
+            margin-top: 1rem;
+            text-align: left;
+            font-size: 1.2rem;
+            line-height: 1.6;
         }
 
-        .example {
-            background-color: #f4f4f4;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 10px;
-        }
-
-        code {
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-family: Consolas, monospace;
-        }
     </style>
 </head>
 <body>
@@ -87,16 +81,25 @@
         <h1>Vererbung</h1>
         <h2>Grundkonzept</h2>
     </header>
-    <main>
-        <div class="main-content">
-            <div class="concept">
-                <h3>Vererbungskonzept</h3>
-                Wir können Attribute und Methoden von Klassen an andere Vererben. Man unterscheidet in:
-                <ul>
-                    <li>Subclass (Child/ Kind) → Klasse die von einer anderen Erbt</li>
-                    <li>Superclass (Parent/ Eltern) → Klasse von der vererbt wird</li>
-                </ul>
+    <main class="main-content">
+        <div class="content">
+            In Java ist es möglich, Attribute und Methoden von einer Klasse an eine andere zu vererben. Wir unterteilen
+            das „Vererbungskonzept“ in zwei Kategorien:
+            <div class="list">
+                <p><i class="fas fa-caret-right"></i> Subclass (Child/ Kind/ Unterklasse) → Klasse die von einer anderen
+                    Erbt</p>
+                <p><i class="fas fa-caret-right"></i> Superclass (Parent/ Eltern/ Oberklasse) → Klasse von der vererbt
+                    wird</p>
             </div>
+            <br>
+            <br>
+            Um von einer Klasse zu erben, verwenden Sie das Schlüsselwort extends.
+            <br>
+            <br>
+            <br>
+            Es ist nützlich für die Wiederverwendbarkeit von Code: Wiederverwendung von Attributen und Methoden einer
+            bestehenden Klasse, wenn Sie eine neue Klasse erstellen.
+
         </div>
     </main>
 </div>
