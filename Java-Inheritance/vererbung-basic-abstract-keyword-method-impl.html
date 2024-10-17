@@ -253,16 +253,34 @@
         </nav>
         <div class="code-container">
             <div id="code-area-1" class="code-area">
-            <pre><code class="language-java">public class SuperClass {
-// Code
+            <pre><code class="language-java">public class Kreis extends Form {
+    private final double radius;
+
+    public Kreis(String farbe, double radius) {
+        super(farbe);
+        this.radius = radius;
+    }
+
+    public double berechneFlaeche() {
+        return Math.PI * radius * radius;
+    }
 }</code></pre>
             </div>
             <div id="resizer" class="resizer"></div>
             <div id="code-area-2" class="code-area">
-                <pre><code class="language-java">public class SubClass extends SuperClass {
-// -> Wir verwenden extends um SubClass die Eigenschaften von SuperClass zu vererben
+                <pre><code class="language-java">public class Rechteck extends Form {
+    private final double laenge;
+    private final double breite;
 
-// Code
+    public Rechteck(String farbe, double laenge, double breite) {
+        super(farbe);
+        this.laenge = laenge;
+        this.breite = breite;
+    }
+
+    public double berechneFlaeche() {
+        return laenge * breite;
+    }
 }</code></pre>
             </div>
         </div>
@@ -336,10 +354,10 @@
         fileTab1.addEventListener('click', () => setActiveTab(fileTab1));
         fileTab2.addEventListener('click', () => setActiveTab(fileTab2));
 
-        fileTab1.setAttribute('data-path', 'Java-Vererbung/SuperClass.java');
-        fileTab2.setAttribute('data-path', 'Java-Vererbung/SubClass.java');
-        updateFileInfo('Java-Vererbung/SuperClass.java', fileTab1);
-        updateFileInfo('Java-Vererbung/SubClass.java', fileTab2);
+        fileTab1.setAttribute('data-path', 'Java-Presentations/Java-Inheritance/Kreis.java');
+        fileTab2.setAttribute('data-path', 'Java-Presentations/Java-Inheritance/Rechteck.java');
+        updateFileInfo('Java-Presentations/Java-Inheritance/Kreis.java', fileTab1);
+        updateFileInfo('Java-Presentations/Java-Inheritance/Rechteck.java', fileTab2);
 
         setActiveTab(fileTab1);
 

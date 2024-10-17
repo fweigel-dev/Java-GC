@@ -253,24 +253,18 @@
         </nav>
         <div class="code-container">
             <div id="code-area-1" class="code-area">
-            <pre><code class="language-java">public final class ParentFinalClass {
-    // ...
-}
-
-/*
-    Eine Finale Klasse kann nicht vererbt werden. Sie kann aber andere Klassen erben.
-
-    Eine Klasse kann nicht final und abstract gleichzeitig sein, da eine abstrakte Klasse von einer anderen Klasse erbt
-    und eine finale Klasse nicht vererbt werden kann.
-    → java: illegal combination of modifiers: abstract and final
- */</code></pre>
+            <pre><code class="language-java">public abstract class Tier {
+    void essen() {
+        System.out.println("Das Tier isst.");
+    }
+}</code></pre>
             </div>
             <div id="resizer" class="resizer"></div>
             <div id="code-area-2" class="code-area">
-                <pre><code class="language-java">public class ChildFinalClass extends ParentFinalClass {
-    // -> Cannot inherit from final 'ParentFinalClass'
-
-    // ...
+                <pre><code class="language-java">public class Hund extends Tier {
+    void bellen() {
+        System.out.println("Der Hund bellt.");
+    }
 }</code></pre>
             </div>
         </div>
@@ -344,10 +338,10 @@
         fileTab1.addEventListener('click', () => setActiveTab(fileTab1));
         fileTab2.addEventListener('click', () => setActiveTab(fileTab2));
 
-        fileTab1.setAttribute('data-path', 'Java-Presentations/Java-Vererbung/Kreis.java');
-        fileTab2.setAttribute('data-path', 'Java-Presentations/Java-Vererbung/Rechteck.java');
-        updateFileInfo('Java-Presentations/Java-Vererbung/Kreis.java', fileTab1);
-        updateFileInfo('Java-Presentations/Java-Vererbung/Rechteck.java', fileTab2);
+        fileTab1.setAttribute('data-path', 'Java-Presentations/Java-Inheritance/Tier.java');
+        fileTab2.setAttribute('data-path', 'Java-Presentations/Java-Inheritance/Hund.java');
+        updateFileInfo('Java-Presentations/Java-Inheritance/Tier.java', fileTab1);
+        updateFileInfo('Java-Presentations/Java-Inheritance/Hund.java', fileTab2);
 
         setActiveTab(fileTab1);
 

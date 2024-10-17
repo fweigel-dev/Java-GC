@@ -236,18 +236,23 @@
             </div>
         </nav>
         <text class="code-area">
-            <pre><code class="language-java">public class AbstractBeispiel {
-    public static void main(String[] args) {
-        Tier tier = new Tier(); // -> java: Tier is abstract; cannot be instantiated
-        tier.essen();
+            <pre><code class="language-java">public abstract class Form {
+    private final String farbe;
+
+    public Form(String farbe) {
+        this.farbe = farbe;
     }
-}
 
-/*
-    Abstrakte Klassen können nicht instanziiert werden und können nur als Basisklassen für andere Klassen verwendet werden!
+    abstract double berechneFlaeche();
 
-    Eine Klasse muss NICHT abstrakt sein, um vererbt zu werden, sie muss aber abstrakt sein, wenn sie eine abstrakte Methode enthält.
- */</code></pre>
+    public String getFarbe() {
+        return farbe;
+    }
+
+    public void beschreibeForm() {
+        System.out.println("Die Form ist " + farbe + " und hat eine Fläche von " + berechneFlaeche());
+    }
+}</code></pre>
         </text>
     </main>
     <footer id="status-bar" class="status-bar">
@@ -303,7 +308,7 @@
             lineColInfo.textContent = 'Line: 1 Column: 1';
         }
 
-        updateFileInfo('Java-Presentations/Java-Vererbung/AbstractBeispiel.java');
+        updateFileInfo('Java-Presentations/Java-Inheritance/Form.java');
     });
 </script>
 </body>

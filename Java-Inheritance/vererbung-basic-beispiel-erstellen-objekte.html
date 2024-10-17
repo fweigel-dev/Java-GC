@@ -38,15 +38,11 @@
         .tab {
             background-color: #2b2b2b;
             padding: 5px 15px;
+            margin-left: 40px;
             margin-right: 5px;
             border-radius: 8px 0 0 0;
             height: 20px;
             line-height: 20px;
-            cursor: pointer;
-        }
-
-        .tab.active {
-            background-color: #000;
         }
 
         .file-close-button {
@@ -136,23 +132,11 @@
             font-size: 18px;
         }
 
-        .code-container {
-            display: flex;
-            flex-grow: 1;
-            overflow: hidden;
-        }
-
         .code-area {
-            flex: 1;
+            flex-grow: 1;
             overflow: auto;
             background-color: #2d2d2d;
             word-wrap: break-word;
-        }
-
-        .resizer {
-            width: 5px;
-            background-color: #3c3f41;
-            cursor: col-resize;
         }
 
         pre[class*="language-"] {
@@ -214,6 +198,7 @@
             }
 
             .tab {
+                margin-left: 30px;
                 padding: 5px 10px;
             }
 
@@ -232,8 +217,7 @@
 <body>
 <div class="ide-container">
     <header class="top-bar">
-        <div id="file-tab-1" class="tab active"></div>
-        <div id="file-tab-2" class="tab"></div>
+        <div id="file-tab" class="tab"></div>
     </header>
     <main class="main-content">
         <nav class="sidebar">
@@ -251,39 +235,15 @@
                 <i class="fas fa-code-branch sidebar-icon" aria-label="Branch"></i>
             </div>
         </nav>
-        <div class="code-container">
-            <div id="code-area-1" class="code-area">
-            <pre><code class="language-java">public class Kreis extends Form {
-    private final double radius;
-
-    public Kreis(String farbe, double radius) {
-        super(farbe);
-        this.radius = radius;
-    }
-
-    public double berechneFlaeche() {
-        return Math.PI * radius * radius;
+        <text class="code-area">
+            <pre><code class="language-java">public class Beispiel {
+    public static void main(String[] args) {
+        Hund hund = new Hund();
+        hund.essen();
+        hund.bellen();
     }
 }</code></pre>
-            </div>
-            <div id="resizer" class="resizer"></div>
-            <div id="code-area-2" class="code-area">
-                <pre><code class="language-java">public class Rechteck extends Form {
-    private final double laenge;
-    private final double breite;
-
-    public Rechteck(String farbe, double laenge, double breite) {
-        super(farbe);
-        this.laenge = laenge;
-        this.breite = breite;
-    }
-
-    public double berechneFlaeche() {
-        return laenge * breite;
-    }
-}</code></pre>
-            </div>
-        </div>
+        </text>
     </main>
     <footer id="status-bar" class="status-bar">
         <div id="file-path" class="file-path"></div>
@@ -293,25 +253,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-bash.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const codeElements = document.querySelectorAll('code');
-        const fileTab1 = document.getElementById('file-tab-1');
-        const fileTab2 = document.getElementById('file-tab-2');
-        const codeArea1 = document.getElementById('code-area-1');
-        const codeArea2 = document.getElementById('code-area-2');
-        const resizer = document.getElementById('resizer');
+        const codeElement = document.querySelector('code');
 
         Prism.highlightAll();
 
-        codeElements.forEach((codeElement) => {
-            const lines = codeElement.innerHTML.split('\n');
+        const lines = codeElement.innerHTML.split('\n');
 
-            codeElement.innerHTML = lines.map((line, index) =>
-                `<span class="line-number">${index + 1}</span>${line}`
-            ).join('\n');
-        });
+        codeElement.innerHTML = lines.map((line, index) =>
+            `<span class="line-number">${index + 1}</span>${line}`
+        ).join('\n');
 
         function getFileIconInfo(filename) {
             const extension = filename.split('.').pop().toLowerCase();
@@ -327,14 +279,15 @@
             return iconMap[extension] || ['fa-regular fa-file', 'icon-generic'];
         }
 
-        function updateFileInfo(path, tabElement) {
+        function updateFileInfo(path) {
             const parts = path.split('/');
             const fileName = parts[parts.length - 1];
             const filePath = document.getElementById('file-path');
             const lineColInfo = document.getElementById('line-col-info');
+            const fileTab = document.getElementById('file-tab');
 
             const [iconClass, colorClass] = getFileIconInfo(fileName);
-            tabElement.innerHTML = `<i class="${iconClass} file-icon ${colorClass}"></i>${fileName}<span class="file-close-button"><i class="fa-solid fa-xmark"></i><span class="tooltiptext">Close</span></span>`;
+            fileTab.innerHTML = `<i class="${iconClass} file-icon ${colorClass}"></i>${fileName}<span class="file-close-button"><i class="fa-solid fa-xmark"></i><span class="tooltiptext">Close</span></span>`;
             filePath.innerHTML = parts.map((part, index) => {
                 if (index === parts.length - 1) {
                     return `<i class="${iconClass} file-icon ${colorClass}"></i>${part}`;
@@ -345,45 +298,7 @@
             lineColInfo.textContent = 'Line: 1 Column: 1';
         }
 
-        function setActiveTab(tabElement) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            tabElement.classList.add('active');
-            updateFileInfo(tabElement.getAttribute('data-path'), tabElement);
-        }
-
-        fileTab1.addEventListener('click', () => setActiveTab(fileTab1));
-        fileTab2.addEventListener('click', () => setActiveTab(fileTab2));
-
-        fileTab1.setAttribute('data-path', 'Java-Presentations/Java-Vererbung/Kreis.java');
-        fileTab2.setAttribute('data-path', 'Java-Presentations/Java-Vererbung/Rechteck.java');
-        updateFileInfo('Java-Presentations/Java-Vererbung/Kreis.java', fileTab1);
-        updateFileInfo('Java-Presentations/Java-Vererbung/Rechteck.java', fileTab2);
-
-        setActiveTab(fileTab1);
-
-        let isResizing = false;
-
-        resizer.addEventListener('mousedown', (e) => {
-            isResizing = true;
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', () => {
-                isResizing = false;
-                document.removeEventListener('mousemove', handleMouseMove);
-            });
-        });
-
-        function handleMouseMove(e) {
-            if (!isResizing) return;
-            const containerRect = document.querySelector('.code-container').getBoundingClientRect();
-            const newPosition = e.clientX - containerRect.left;
-            const containerWidth = containerRect.width;
-
-            if (newPosition > 100 && newPosition < containerWidth - 100) {
-                const leftPercentage = (newPosition / containerWidth) * 100;
-                codeArea1.style.flex = `0 0 ${leftPercentage}%`;
-                codeArea2.style.flex = `0 0 ${100 - leftPercentage}%`;
-            }
-        }
+        updateFileInfo('Java-Presentations/Java-Inheritance/Beispiel.java');
     });
 </script>
 </body>

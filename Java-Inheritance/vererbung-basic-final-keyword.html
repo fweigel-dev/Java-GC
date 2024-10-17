@@ -38,11 +38,15 @@
         .tab {
             background-color: #2b2b2b;
             padding: 5px 15px;
-            margin-left: 40px;
             margin-right: 5px;
             border-radius: 8px 0 0 0;
             height: 20px;
             line-height: 20px;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background-color: #000;
         }
 
         .file-close-button {
@@ -132,11 +136,23 @@
             font-size: 18px;
         }
 
-        .code-area {
+        .code-container {
+            display: flex;
             flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .code-area {
+            flex: 1;
             overflow: auto;
             background-color: #2d2d2d;
             word-wrap: break-word;
+        }
+
+        .resizer {
+            width: 5px;
+            background-color: #3c3f41;
+            cursor: col-resize;
         }
 
         pre[class*="language-"] {
@@ -198,7 +214,6 @@
             }
 
             .tab {
-                margin-left: 30px;
                 padding: 5px 10px;
             }
 
@@ -217,7 +232,8 @@
 <body>
 <div class="ide-container">
     <header class="top-bar">
-        <div id="file-tab" class="tab"></div>
+        <div id="file-tab-1" class="tab active"></div>
+        <div id="file-tab-2" class="tab"></div>
     </header>
     <main class="main-content">
         <nav class="sidebar">
@@ -235,15 +251,29 @@
                 <i class="fas fa-code-branch sidebar-icon" aria-label="Branch"></i>
             </div>
         </nav>
-        <text class="code-area">
-            <pre><code class="language-java">public class Beispiel {
-    public static void main(String[] args) {
-        Hund hund = new Hund();
-        hund.essen();
-        hund.bellen();
-    }
+        <div class="code-container">
+            <div id="code-area-1" class="code-area">
+            <pre><code class="language-java">public final class ParentFinalClass {
+    // ...
+}
+
+/*
+    Eine Finale Klasse kann nicht vererbt werden. Sie kann aber andere Klassen erben.
+
+    Eine Klasse kann nicht final und abstract gleichzeitig sein, da eine abstrakte Klasse von einer anderen Klasse erbt
+    und eine finale Klasse nicht vererbt werden kann.
+    → java: illegal combination of modifiers: abstract and final
+ */</code></pre>
+            </div>
+            <div id="resizer" class="resizer"></div>
+            <div id="code-area-2" class="code-area">
+                <pre><code class="language-java">public class ChildFinalClass extends ParentFinalClass {
+    // -> Cannot inherit from final 'ParentFinalClass'
+
+    // ...
 }</code></pre>
-        </text>
+            </div>
+        </div>
     </main>
     <footer id="status-bar" class="status-bar">
         <div id="file-path" class="file-path"></div>
@@ -253,17 +283,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const codeElement = document.querySelector('code');
+        const codeElements = document.querySelectorAll('code');
+        const fileTab1 = document.getElementById('file-tab-1');
+        const fileTab2 = document.getElementById('file-tab-2');
+        const codeArea1 = document.getElementById('code-area-1');
+        const codeArea2 = document.getElementById('code-area-2');
+        const resizer = document.getElementById('resizer');
 
         Prism.highlightAll();
 
-        const lines = codeElement.innerHTML.split('\n');
+        codeElements.forEach((codeElement) => {
+            const lines = codeElement.innerHTML.split('\n');
 
-        codeElement.innerHTML = lines.map((line, index) =>
-            `<span class="line-number">${index + 1}</span>${line}`
-        ).join('\n');
+            codeElement.innerHTML = lines.map((line, index) =>
+                `<span class="line-number">${index + 1}</span>${line}`
+            ).join('\n');
+        });
 
         function getFileIconInfo(filename) {
             const extension = filename.split('.').pop().toLowerCase();
@@ -279,15 +317,14 @@
             return iconMap[extension] || ['fa-regular fa-file', 'icon-generic'];
         }
 
-        function updateFileInfo(path) {
+        function updateFileInfo(path, tabElement) {
             const parts = path.split('/');
             const fileName = parts[parts.length - 1];
             const filePath = document.getElementById('file-path');
             const lineColInfo = document.getElementById('line-col-info');
-            const fileTab = document.getElementById('file-tab');
 
             const [iconClass, colorClass] = getFileIconInfo(fileName);
-            fileTab.innerHTML = `<i class="${iconClass} file-icon ${colorClass}"></i>${fileName}<span class="file-close-button"><i class="fa-solid fa-xmark"></i><span class="tooltiptext">Close</span></span>`;
+            tabElement.innerHTML = `<i class="${iconClass} file-icon ${colorClass}"></i>${fileName}<span class="file-close-button"><i class="fa-solid fa-xmark"></i><span class="tooltiptext">Close</span></span>`;
             filePath.innerHTML = parts.map((part, index) => {
                 if (index === parts.length - 1) {
                     return `<i class="${iconClass} file-icon ${colorClass}"></i>${part}`;
@@ -298,7 +335,45 @@
             lineColInfo.textContent = 'Line: 1 Column: 1';
         }
 
-        updateFileInfo('Java-Presentations/Java-Vererbung/Beispiel.java');
+        function setActiveTab(tabElement) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            tabElement.classList.add('active');
+            updateFileInfo(tabElement.getAttribute('data-path'), tabElement);
+        }
+
+        fileTab1.addEventListener('click', () => setActiveTab(fileTab1));
+        fileTab2.addEventListener('click', () => setActiveTab(fileTab2));
+
+        fileTab1.setAttribute('data-path', 'Java-Presentations/Java-Inheritance/ParentFinalClass.java');
+        fileTab2.setAttribute('data-path', 'Java-Presentations/Java-Inheritance/ChildFinalClass.java');
+        updateFileInfo('Java-Presentations/Java-Inheritance/ParentFinalClass.java', fileTab1);
+        updateFileInfo('Java-Presentations/Java-Inheritance/ChildFinalClass.java', fileTab2);
+
+        setActiveTab(fileTab1);
+
+        let isResizing = false;
+
+        resizer.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', () => {
+                isResizing = false;
+                document.removeEventListener('mousemove', handleMouseMove);
+            });
+        });
+
+        function handleMouseMove(e) {
+            if (!isResizing) return;
+            const containerRect = document.querySelector('.code-container').getBoundingClientRect();
+            const newPosition = e.clientX - containerRect.left;
+            const containerWidth = containerRect.width;
+
+            if (newPosition > 100 && newPosition < containerWidth - 100) {
+                const leftPercentage = (newPosition / containerWidth) * 100;
+                codeArea1.style.flex = `0 0 ${leftPercentage}%`;
+                codeArea2.style.flex = `0 0 ${100 - leftPercentage}%`;
+            }
+        }
     });
 </script>
 </body>
