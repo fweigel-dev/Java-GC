@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Interface Basics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          media="print" onload="this.media='all'"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #2b2b2b;
+            color: #a9b7c6;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4da6ff;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #ff8c00;
+            margin-top: 0;
+        }
+
+        .content {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            width: 40vw;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .analogy-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .entity {
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .entity i {
+            font-size: 10rem;
+            color: #a9b7c6;
+        }
+
+        .mascot {
+            width: 300px;
+            height: 300px;
+            background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fscoop-cms.s3-eu-west-1.amazonaws.com%2F55e853c7ca2f3a596c8b4568%2Fjava-mascot-min.png&f=1&nofb=1&ipt=e908032b39ec7900501b7cad701247e6c8585ccf5bc30b3c98c0e48c464d86d5&ipo=images');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: 20px;
+        }
+
+        .analogy {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+
+        .menu {
+            width: 250px;
+            height: 350px;
+            background-color: #f0e68c;
+            border: 2px solid #daa520;
+            border-radius: 10px;
+            padding: 20px;
+            color: #8b4513;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 2px solid #8b4513;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .arrow {
+            font-size: 4rem;
+            color: #4da6ff;
+            margin: 0 20px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="content">
+    <div class="container">
+        <h1>Java OOP</h1>
+        <h2>Interface Basics</h2>
+        <div class="analogy">
+            <div class="analogy-diagram">
+                <div class="entity customer">
+                    <div class="mascot"></div>
+                </div>
+                <div class="arrow">←</div>
+                <div class="menu">
+                    <div class="menu-title">Java Cafe Menu</div>
+                    <div class="menu-item">
+                        <span>Byte Burger</span>
+                        <span>$10.99</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>Array of Fries</span>
+                        <span>$3.99</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>Null Pointer Soup</span>
+                        <span>$5.99</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>Exception Espresso</span>
+                        <span>$2.99</span>
+                    </div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="entity kitchen">
+                    <i class="fas fa-burger"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
