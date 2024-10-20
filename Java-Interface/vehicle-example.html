@@ -105,14 +105,12 @@
   <main class="main-content">
     <div class="content">
       <div id="inheritance-tree" class="inheritance-tree">
-        <!-- The tree will be dynamically generated here -->
       </div>
     </div>
   </main>
 </div>
 
 <script>
-  // Sample JSON object representing the inheritance structure
   const inheritanceData = {
     name: "Vehicle",
     children: [
@@ -167,10 +165,8 @@
       const childrenWidth = 100 / (data.children.length + 1);
       const verticalGap = 120;
 
-      // Create vertical connection from parent to horizontal line
       treeEl.appendChild(createConnection(x, y + 60, x, y + 90, true));
 
-      // Create horizontal connection
       if (data.children.length > 1) {
         const leftmostChild = x - (childrenWidth * (data.children.length - 1)) / 2;
         const rightmostChild = x + (childrenWidth * (data.children.length - 1)) / 2;
@@ -181,7 +177,6 @@
         const childX = x + childrenWidth * (index - (data.children.length - 1) / 2);
         const childY = y + verticalGap;
 
-        // Create vertical connection from horizontal line to child
         treeEl.appendChild(createConnection(childX, y + 90, childX, childY, true));
 
         generateTree(child, childX, childY, level + 1, treeEl);
@@ -194,7 +189,6 @@
     generateTree(inheritanceData, 50, 0, 0, treeEl);
   }
 
-  // Initialize the tree when the page loads
   window.onload = initializeTree;
 </script>
 </body>
