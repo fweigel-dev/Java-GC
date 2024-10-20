@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dynamic Inheritance Tree Generator">
+  <title>Dynamic Inheritance Tree</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        media="print" onload="this.media='all'"/>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      background-color: #2b2b2b;
+      color: #a9b7c6;
+      overflow: hidden;
+    }
+
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      height: calc(100% - 40px);
+      margin-top: 40px;
+      max-height: calc(100vh - 47px);
+    }
+
+    .main-content {
+      display: flex;
+      flex-grow: 1;
+      overflow: hidden;
+      font-size: 1rem;
+    }
+
+    .content {
+      text-align: center;
+      padding: 2rem;
+      border-radius: 20px;
+      max-width: 900px;
+      width: 95%;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #4da6ff;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #ff8c00;
+      margin-top: 0;
+    }
+
+    .inheritance-tree {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+      height: 400px;
+      position: relative;
+    }
+
+    .class-node {
+      width: 120px;
+      height: 60px;
+      background-color: #3c3f41;
+      border: 2px solid #6897bb;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      position: absolute;
+      z-index: 2;
+    }
+
+    .connection {
+      position: absolute;
+      background-color: #6897bb;
+      z-index: 1;
+    }
+
+    .vertical-line {
+      width: 2px;
+    }
+
+    .horizontal-line {
+      height: 2px;
+    }
+  </style>
+</head>
+<body>
+<div class="main-container">
+  <header>
+    <h1>Beispiel</h1>
+    <h2>Was ist Abstraktion?</h2>
+  </header>
+  <main class="main-content">
+    <div class="content">
+      <div id="inheritance-tree" class="inheritance-tree">
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const inheritanceData = {
+    name: "Vehicle",
+    children: [
+      {
+        name: "Four Wheeler",
+        children: [
+          { name: "Car" },
+          { name: "Truck" }
+        ]
+      },
+      {
+        name: "Two Wheeler",
+        children: [
+          { name: "Bike" }
+        ]
+      }
+    ]
+  };
+
+  function createNode(name, x, y) {
+    const node = document.createElement('div');
+    node.className = 'class-node';
+    node.style.left = `${x}%`;
+    node.style.top = `${y}px`;
+    node.style.transform = 'translateX(-50%)';
+    node.textContent = name;
+    return node;
+  }
+
+  function createConnection(x1, y1, x2, y2, isVertical) {
+    const connection = document.createElement('div');
+    connection.className = `connection ${isVertical ? 'vertical-line' : 'horizontal-line'}`;
+
+    if (isVertical) {
+      connection.style.left = `${x1}%`;
+      connection.style.top = `${y1}px`;
+      connection.style.height = `${y2 - y1}px`;
+    } else {
+      connection.style.left = `${Math.min(x1, x2)}%`;
+      connection.style.top = `${y1}px`;
+      connection.style.width = `${Math.abs(x2 - x1)}%`;
+    }
+
+    return connection;
+  }
+
+  function generateTree(data, x, y, level = 0, treeEl) {
+    const node = createNode(data.name, x, y);
+    treeEl.appendChild(node);
+
+    if (data.children && data.children.length > 0) {
+      const childrenWidth = 100 / (data.children.length + 1);
+      const verticalGap = 120;
+
+      treeEl.appendChild(createConnection(x, y + 60, x, y + 90, true));
+
+      if (data.children.length > 1) {
+        const leftmostChild = x - (childrenWidth * (data.children.length - 1)) / 2;
+        const rightmostChild = x + (childrenWidth * (data.children.length - 1)) / 2;
+        treeEl.appendChild(createConnection(leftmostChild, y + 90, rightmostChild, y + 90, false));
+      }
+
+      data.children.forEach((child, index) => {
+        const childX = x + childrenWidth * (index - (data.children.length - 1) / 2);
+        const childY = y + verticalGap;
+
+        treeEl.appendChild(createConnection(childX, y + 90, childX, childY, true));
+
+        generateTree(child, childX, childY, level + 1, treeEl);
+      });
+    }
+  }
+
+  function initializeTree() {
+    const treeEl = document.getElementById('inheritance-tree');
+    generateTree(inheritanceData, 50, 0, 0, treeEl);
+  }
+
+  window.onload = initializeTree;
+</script>
+</body>
+</html>

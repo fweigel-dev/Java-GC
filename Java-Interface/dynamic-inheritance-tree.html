@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dynamic Inheritance Tree Generator with Code Display">
+    <title>Dynamic Inheritance Tree with Code Display</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          media="print" onload="this.media='all'"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          media="print" onload="this.media='all'"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #2b2b2b;
+            color: #a9b7c6;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .tree-container {
+            width: 50%;
+            padding: 2rem;
+        }
+
+        .code-container {
+            width: 50%;
+            padding: 2rem;
+            overflow: auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4da6ff;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #ff8c00;
+            margin-top: 0;
+        }
+
+        .inheritance-tree {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            height: 400px;
+            position: relative;
+        }
+
+        .class-node {
+            width: 120px;
+            height: 60px;
+            background-color: #3c3f41;
+            border: 2px solid #6897bb;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            position: absolute;
+            z-index: 2;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .class-node:hover {
+            background-color: #4b4f52;
+        }
+
+        .connection {
+            position: absolute;
+            background-color: #6897bb;
+            z-index: 1;
+        }
+
+        .vertical-line {
+            width: 2px;
+        }
+
+        .horizontal-line {
+            height: 2px;
+        }
+
+        .code-area {
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        pre {
+            margin: 0;
+            padding: 1rem;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+
+    <div class="content-wrapper">
+        <div class="tree-container">
+            <header>
+                <h1>Abstraktion</h1>
+                <h2>Vererbungsbaum</h2>
+            </header>
+            <div id="inheritance-tree" class="inheritance-tree">
+            </div>
+        </div>
+        <div class="code-container">
+            <div class="code-area">
+                <pre><code class="language-java" id="code-display"></code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+
+<script>
+    const inheritanceData = {
+        name: "Vehicle",
+        code: `
+public abstract class Vehicle {
+    protected String brand;
+    protected String model;
+    protected int year;
+
+    public Vehicle(String brand, String model, int year) {
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+    }
+
+    public abstract void start();
+    public abstract void stop();
+}`,
+        children: [
+            {
+                name: "Four Wheeler",
+                code: `
+public abstract class FourWheeler extends Vehicle {
+    protected int numberOfDoors;
+
+    public FourWheeler(String brand, String model, int year, int numberOfDoors) {
+        super(brand, model, year);
+        this.numberOfDoors = numberOfDoors;
+    }
+
+    public abstract void changeGear(int newGear);
+}`,
+                children: [
+                    {
+                        name: "Car",
+                        code: `
+public class Car extends FourWheeler {
+    private boolean isConvertible;
+
+    public Car(String brand, String model, int year, int numberOfDoors, boolean isConvertible) {
+        super(brand, model, year, numberOfDoors);
+        this.isConvertible = isConvertible;
+    }
+
+    @Override
+    public void start() {
+        System.out.println("Car engine started");
+    }
+
+    @Override
+    public void stop() {
+        System.out.println("Car engine stopped");
+    }
+
+    @Override
+    public void changeGear(int newGear) {
+        System.out.println("Car gear changed to " + newGear);
+    }
+
+    public void openRoof() {
+        if (isConvertible) {
+            System.out.println("Opening the convertible roof");
+        } else {
+            System.out.println("This car doesn't have a convertible roof");
+        }
+    }
+}`
+                    },
+                    {
+                        name: "Truck",
+                        code: `
+public class Truck extends FourWheeler {
+    private double cargoCapacity;
+
+    public Truck(String brand, String model, int year, int numberOfDoors, double cargoCapacity) {
+        super(brand, model, year, numberOfDoors);
+        this.cargoCapacity = cargoCapacity;
+    }
+
+    @Override
+    public void start() {
+        System.out.println("Truck engine started");
+    }
+
+    @Override
+    public void stop() {
+        System.out.println("Truck engine stopped");
+    }
+
+    @Override
+    public void changeGear(int newGear) {
+        System.out.println("Truck gear changed to " + newGear);
+    }
+
+    public void loadCargo(double weight) {
+        if (weight <= cargoCapacity) {
+            System.out.println("Cargo loaded: " + weight + " tons");
+        } else {
+            System.out.println("Cargo weight exceeds capacity");
+        }
+    }
+}`
+                    }
+                ]
+            },
+            {
+                name: "Two Wheeler",
+                code: `
+public abstract class TwoWheeler extends Vehicle {
+    protected boolean hasKickStart;
+
+    public TwoWheeler(String brand, String model, int year, boolean hasKickStart) {
+        super(brand, model, year);
+        this.hasKickStart = hasKickStart;
+    }
+
+    public abstract void balance();
+}`,
+                children: [
+                    {
+                        name: "Bike",
+                        code: `
+public class Bike extends TwoWheeler {
+    private boolean isElectric;
+
+    public Bike(String brand, String model, int year, boolean hasKickStart, boolean isElectric) {
+        super(brand, model, year, hasKickStart);
+        this.isElectric = isElectric;
+    }
+
+    @Override
+    public void start() {
+        if (isElectric) {
+            System.out.println("Electric bike powered on");
+        } else {
+            System.out.println("Bike engine started");
+        }
+    }
+
+    @Override
+    public void stop() {
+        if (isElectric) {
+            System.out.println("Electric bike powered off");
+        } else {
+            System.out.println("Bike engine stopped");
+        }
+    }
+
+    @Override
+    public void balance() {
+        System.out.println("Balancing the bike");
+    }
+
+    public void pedal() {
+        System.out.println("Pedaling the bike");
+    }
+}`
+                    }
+                ]
+            }
+        ]
+    };
+
+    function createNode(name, x, y) {
+        const node = document.createElement('div');
+        node.className = 'class-node';
+        node.style.left = `${x}%`;
+        node.style.top = `${y}px`;
+        node.style.transform = 'translateX(-50%)';
+        node.textContent = name;
+        return node;
+    }
+
+    function createConnection(x1, y1, x2, y2, isVertical) {
+        const connection = document.createElement('div');
+        connection.className = `connection ${isVertical ? 'vertical-line' : 'horizontal-line'}`;
+        
+        if (isVertical) {
+            connection.style.left = `${x1}%`;
+            connection.style.top = `${y1}px`;
+            connection.style.height = `${y2 - y1}px`;
+        } else {
+            connection.style.left = `${Math.min(x1, x2)}%`;
+            connection.style.top = `${y1}px`;
+            connection.style.width = `${Math.abs(x2 - x1)}%`;
+        }
+        
+        return connection;
+    }
+
+    function generateTree(data, x, y, level = 0, treeEl) {
+        const node = createNode(data.name, x, y);
+        node.addEventListener('click', () => displayCode(data.code));
+        treeEl.appendChild(node);
+
+        if (data.children && data.children.length > 0) {
+            const childrenWidth = 100 / (data.children.length + 1);
+            const verticalGap = 120;
+
+            treeEl.appendChild(createConnection(x, y + 60, x, y + 90, true));
+
+            if (data.children.length > 1) {
+                const leftmostChild = x - (childrenWidth * (data.children.length - 1)) / 2;
+                const rightmostChild = x + (childrenWidth * (data.children.length - 1)) / 2;
+                treeEl.appendChild(createConnection(leftmostChild, y + 90, rightmostChild, y + 90, false));
+            }
+
+            data.children.forEach((child, index) => {
+                const childX = x + childrenWidth * (index - (data.children.length - 1) / 2);
+                const childY = y + verticalGap;
+
+                treeEl.appendChild(createConnection(childX, y + 90, childX, childY, true));
+
+                generateTree(child, childX, childY, level + 1, treeEl);
+            });
+        }
+    }
+
+    function displayCode(code) {
+        const codeDisplay = document.getElementById('code-display');
+        codeDisplay.textContent = code.trim();
+        Prism.highlightAll();
+    }
+
+    function initializeTree() {
+        const treeEl = document.getElementById('inheritance-tree');
+        generateTree(inheritanceData, 50, 0, 0, treeEl);
+        displayCode(inheritanceData.code);
+    }
+
+    window.onload = initializeTree;
+</script>
+</body>
+</html>
