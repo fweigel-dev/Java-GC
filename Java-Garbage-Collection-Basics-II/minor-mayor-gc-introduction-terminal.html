@@ -143,11 +143,12 @@
 </div>
 
 <script>
-    const gcLog = `[0.019s][info][gc] Using Serial
-[0.745s][info][gc] GC(0) Pause Young (Allocation Failure) 273M->193M(989M) 190.573ms
+    const gcLog = `[0.002s][info][gc] Using Serial
+[1,317s][info][gc] GC(0) Pause Young (Allocation Failure) 274M->215M(989M) 368,971ms
 MAP size: 3000000
-[1.055s][info][gc] GC(1) Pause Full (System.gc()) 298M->293M(989M) 249.899ms
-MAP size: 1000000`;
+[1,838s][info][gc] GC(1) Pause Full (System.gc()) 297M->294M(989M) 436,229ms
+MAP size: 1000000
+[2,300s][info][gc] GC(2) Pause Full (System.gc()) 425M->145M(989M) 230,561ms`;
 
 
     document.addEventListener('DOMContentLoaded', () => {

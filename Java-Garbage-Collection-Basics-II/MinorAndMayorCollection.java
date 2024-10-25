@@ -13,6 +13,7 @@ public class MinorAndMayorCollection {
             String newString = stringWithPrefix + i;
             stringContainer.add(newString);
         }
+
         System.out.println("MAP size: " + stringContainer.size());
 
         System.gc();
@@ -23,5 +24,7 @@ public class MinorAndMayorCollection {
         }
 
         System.out.println("MAP size: " + stringContainer.size());
+
+        System.gc();
     }
 }
