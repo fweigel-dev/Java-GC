@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Heap-Speicherstruktur der Hotspot JVM">
+    <title>Aufbau der JVM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          media="print" onload="this.media='all'"/>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #2b2b2b;
+            color: #a9b7c6;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 40px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4da6ff;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #ff8c00;
+            margin-top: 0;
+        }
+
+        .heap-container {
+            display: flex;
+            flex-direction: row;
+            width: 95%;
+            max-width: 1000px;
+            height: 100px;
+            transition: all 0.5s ease-in-out;
+            margin-top: -10.5rem;
+        }
+
+        .heap-row {
+            display: flex;
+            flex: 1;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .heap-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            margin: 5px;
+            flex: 1;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .label {
+            text-align: center;
+            padding: 5px;
+            font-size: 1rem;
+            color: #2b2b2b;
+            font-weight: bold;
+        }
+
+        .eden {
+            background-color: #4da6ff;
+        }
+
+        .survivor {
+            background-color: #ff8c00;
+        }
+
+        .tenured {
+            background-color: #9b59b6;
+        }
+
+        .permanent {
+            background-color: #2ecc71;
+        }
+
+        .generation-label {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            padding: 10px;
+            font-weight: bold;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background-color: #333;
+            border-radius: 10px;
+            margin-right: 10px;
+            color: #fff;
+        }
+
+        .heap-section {
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Heap-Speicherstruktur der JVM</h1>
+    <h2>Genereller Aufbau</h2>
+</header>
+<div class="main-container">
+
+    <div class="heap-container">
+        <div class="heap-row">
+            <div class="heap-section young-gen">
+                <div class="generation-label">Young Gen</div>
+                <div class="heap-item eden">
+                    <div class="label">Eden</div>
+                </div>
+                <div class="heap-item survivor">
+                    <div class="label">S0</div>
+                </div>
+                <div class="heap-item survivor">
+                    <div class="label">S1</div>
+                </div>
+            </div>
+            <div class="heap-section old-gen">
+                <div class="generation-label">Old Gen</div>
+                <div class="heap-item tenured">
+                    <div class="label">Tenured</div>
+                </div>
+            </div>
+            <div class="heap-section perm-gen">
+                <div class="generation-label">Perm Gen</div>
+                <div class="heap-item permanent">
+                    <div class="label">Permanent</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let isExpanded = false;
+
+    document.body.addEventListener('click', () => {
+        const heapContainer = document.querySelector('.heap-container');
+        const heapRow = document.querySelector('.heap-row');
+        const sections = heapRow.querySelectorAll('.heap-section');
+        const labels = document.querySelectorAll('.generation-label');
+
+        if (isExpanded) {
+            heapContainer.style.flexDirection = 'row';
+            heapContainer.style.height = '100px';
+            heapRow.style.flexDirection = 'row';
+            heapRow.style.flexWrap = 'nowrap';
+            sections.forEach(section => {
+                section.style.flex = '1';
+                section.style.flexDirection = 'row';
+                section.style.margin = '0';
+            });
+            labels.forEach(label => label.style.display = 'none');
+        } else {
+            heapContainer.style.flexDirection = 'column';
+            heapContainer.style.height = '350px';
+            heapRow.style.flexDirection = 'column';
+            heapRow.style.flexWrap = 'nowrap';
+
+            sections.forEach((section, index) => {
+                section.style.flex = '1 0 30%';
+                section.style.flexDirection = 'row';
+                section.style.margin = index === 0 ? '0 0 10px 0' : '10px 0';
+            });
+
+            labels.forEach(label => label.style.display = 'flex');
+        }
+        isExpanded = !isExpanded;
+    });
+</script>
+</body>
+</html>
